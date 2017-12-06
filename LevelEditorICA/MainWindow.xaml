@@ -1,0 +1,17 @@
+﻿<Window x:Class="LevelEditorICA.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:LevelEditorICA"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="350" Width="525">
+    <Grid>
+        <Menu HorizontalAlignment="Left" Height="20.481" VerticalAlignment="Top" Width="517">
+            <MenuItem Header="MenuItem" Height="20.481" Width="71.898">
+                <MenuItem Header="MenuItem" HorizontalAlignment="Left" Height="106.109"/>
+            </MenuItem>
+        </Menu>
+
+    </Grid>
+</Window>

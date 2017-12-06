@@ -24,5 +24,10 @@ namespace LevelEditorICA
         {
             InitializeComponent();
         }
+
+        private void ExitEditorCommand(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
     }
 }

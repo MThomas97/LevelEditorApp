@@ -8,9 +8,13 @@
         Title="MainWindow" Height="350" Width="525">
     <Grid>
         <Menu HorizontalAlignment="Left" Height="20.481" VerticalAlignment="Top" Width="517">
-            <MenuItem Header="MenuItem" Height="20.481" Width="71.898">
-                <MenuItem Header="MenuItem" HorizontalAlignment="Left" Height="106.109"/>
+            <MenuItem Header="File" Height="20.481">
+                <MenuItem Header="New"/>
+                <MenuItem Header="Load"/>
+                <MenuItem x:Name="SaveGame" Header="Save"/>
+                <MenuItem x:Name="ExitEditor" Header="Exit" Click="ExitEditorCommand"/>
             </MenuItem>
+            <MenuItem Header="Options"/>
         </Menu>
 
     </Grid>

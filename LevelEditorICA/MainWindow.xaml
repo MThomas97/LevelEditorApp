@@ -7,15 +7,32 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525">
     <Grid>
-        <Menu HorizontalAlignment="Left" Height="20.481" VerticalAlignment="Top" Width="517">
-            <MenuItem Header="File" Height="20.481">
+        <Menu Height="20.481" VerticalAlignment="Top">
+            <MenuItem Header="File">
                 <MenuItem Header="New"/>
                 <MenuItem Header="Load"/>
                 <MenuItem x:Name="SaveGame" Header="Save"/>
                 <MenuItem x:Name="ExitEditor" Header="Exit" Click="ExitEditorCommand"/>
             </MenuItem>
-            <MenuItem Header="Options"/>
+            <MenuItem x:Name="Sprites" Header="Sprites">
+                <MenuItem Header="Load"/>
+            </MenuItem>
+            <MenuItem Header="Options">
+                <MenuItem x:Name="Undo" Header="Undo"/>
+                <MenuItem x:Name="Redo" Header="Redo" Width="117"/>
+            </MenuItem>
         </Menu>
+        <Grid x:Name="gridLevel" HorizontalAlignment="Left" Height="283.519" Margin="10,25.481,0,0" VerticalAlignment="Top" Width="497">
+            <ListView x:Name="lstvIndivTiles" 
+                ScrollViewer.VerticalScrollBarVisibility="Visible" 
+                ScrollViewer.HorizontalScrollBarVisibility="Disabled" Margin="302.606,0,0,60.87">
+                <ListView.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel Orientation="Horizontal"/>
+                    </ItemsPanelTemplate>
+                </ListView.ItemsPanel>
+            </ListView>
+        </Grid>
 
     </Grid>
 </Window>

@@ -22,18 +22,21 @@
                 <MenuItem x:Name="Redo" Header="Redo" Width="117"/>
             </MenuItem>
         </Menu>
-        <Grid x:Name="gridLevel" HorizontalAlignment="Left" Height="283.519" Margin="10,25.481,0,0" VerticalAlignment="Top" Width="497">
-            <ListView x:Name="lstvIndivTiles" 
-                ScrollViewer.VerticalScrollBarVisibility="Visible" 
-                ScrollViewer.HorizontalScrollBarVisibility="Disabled" Margin="302.606,0,0,60.87">
-                <ListView.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <WrapPanel Orientation="Horizontal"/>
-                    </ItemsPanelTemplate>
-                </ListView.ItemsPanel>
-            </ListView>
-            <TextBlock HorizontalAlignment="Left" Height="181.007" Margin="46.069,33.217,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="212.242"/>
-        </Grid>
+        
+        <TextBlock HorizontalAlignment="Left" Height="261.098" Margin="10,32.268,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="324.37"><Run Text=""/><InlineUIContainer>
+                <UniformGrid x:Name="GridSheet" Rows="3" Columns="3" Height="92.341" Width="251.897">
+                    <Button Content="Rohit" Grid.Row="0" Grid.Column="2" Background="White" BorderBrush="White" />
+                    <Button Content="Rohit"  Grid.Row="0" Grid.Column="2" Background="White" BorderBrush="White" />
+                    <Button Content="Rohit"  Grid.Row="0" Grid.Column="2" Background="White" BorderBrush="White" />
+                    <Button Content="Rohit"  Grid.Row="0" Grid.Column="2" Background="White" BorderBrush="White" />
+                    <Button Content="Rohit"  Grid.Row="0" Grid.Column="2" Background="White" BorderBrush="White" />
+                    <Button Content="Rohit"  Grid.Row="0" Grid.Column="2" Background="White" BorderBrush="White" />
+                    <Button Content="Rohit"  Grid.Row="0" Grid.Column="2" Background="White" BorderBrush="White" />
+                    <Button Content="Rohit"  Grid.Row="0" Grid.Column="2" Background="White" BorderBrush="White" />
+                    <Button Content="Rohit"  Grid.Row="0" Grid.Column="2" Background="White" BorderBrush="White" />
+                </UniformGrid>
+            </InlineUIContainer></TextBlock>
+
 
     </Grid>
 </Window>

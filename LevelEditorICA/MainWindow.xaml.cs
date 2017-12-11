@@ -20,9 +20,14 @@ namespace LevelEditorICA
     /// </summary>
     public partial class MainWindow : Window
     {
+
+      
+
         public MainWindow()
         {
             InitializeComponent();
+
+            
         }
 
         private void ExitEditorCommand(object sender, RoutedEventArgs e)

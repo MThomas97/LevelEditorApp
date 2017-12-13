@@ -45,18 +45,18 @@ namespace LevelEditorICA
         // my config file
         //myConfigFile cfgFile = new myConfigFile();
 
-        // number of columns considered
-        // (shouldnt this be stored in the config file?!)
-        const int cols = 23;
-        // number of rows considered
-        // (shouldnt this be stored in the config file?!)
-        const int rows = 21;
+        //// number of columns considered
+        //// (shouldnt this be stored in the config file?!)
+        //const int cols = 23;
+        //// number of rows considered
+        //// (shouldnt this be stored in the config file?!)
+        //const int rows = 21;
 
         // size, in pixels, of tiles considered
         // (shouldnt this be stored in the config file?!)
         int tileSize = 32;
 
-        int gridHeight = 10;
+        int gridHeight = 5;
         int gridWidth = 5;
  
         // this is a special type of collection which automatically updates the UI element it is bound to 
@@ -64,8 +64,8 @@ namespace LevelEditorICA
         ObservableCollection<Image> mapImages = new ObservableCollection<Image>();
 
         // drag and drop
-        Point mouseOffset;
-        private bool isDragging = false;
+        //Point mouseOffset;
+        //private bool isDragging = false;
 
         //private int _boundNumber;
         public int BoundNumber
@@ -104,6 +104,7 @@ namespace LevelEditorICA
                 if (gridWidth != value)
                 {
                     gridWidth = value;
+                   
                     OnPropertyChanged();
                 }
             }
@@ -117,8 +118,27 @@ namespace LevelEditorICA
                 if (gridHeight != value)
                 {
                     gridHeight = value;
+                    
                     OnPropertyChanged();
                 }
+            }
+        }
+
+        public int SetGridHeight
+        {
+            get { return gridHeight * tileSize; }
+            set
+            {
+                
+            }
+        }
+
+        public int SetGridWidth
+        {
+            get { return gridWidth * tileSize; }
+            set
+            {
+                
             }
         }
 
@@ -136,13 +156,14 @@ namespace LevelEditorICA
         {
             if (gridMapTiles != null)
             {
+                
                 gridMapTiles.Children.Clear();
                 gridMapTiles.RowDefinitions.Clear();
                 gridMapTiles.ColumnDefinitions.Clear();
                 gridMapTiles.ShowGridLines = showPending;
 
-                if (mapImages.Count < 1)
-                {
+                //if (mapImages.Count < 1)
+                //{
                     // images for sprites
                     //BtnOpenFile_Click();
                     //createTilesListOnCanvas();
@@ -162,23 +183,51 @@ namespace LevelEditorICA
                         for (int j = 0; j < gridWidth; j++)
                         {
                             Button btn = new Button();
+                            
                             if (gridWidth < j)
                                 gridMapTiles.Children.Remove(btn);
-
+                            
                             Grid.SetRow(btn, i);
                             Grid.SetColumn(btn, j);
                             gridMapTiles.Children.Add(btn);
-                        }
+                            
+                        
+                    }
+                
+                //}
 
-                }
             }
+        }
+
+        private void BtnLoadXML_click(object sender, RoutedEventArgs e)
+        {
+            Microsoft.Win32.OpenFileDialog openFileDialog = new Microsoft.Win32.OpenFileDialog();
+            //openFileDialog.InitialDirectory = "c://";
+            openFileDialog.FileName = "";
+            openFileDialog.DefaultExt = ".XML";
+            openFileDialog.Filter = "XML files (.XML)|*.XML";
+            openFileDialog.RestoreDirectory = true;
+            Nullable<bool> result = openFileDialog.ShowDialog();
+
+            if (result.HasValue && result.Value)
+            {
+
+                string sFilenames = "";
+
+                foreach (string sFilename in openFileDialog.FileNames)
+                {
+                    sFilenames += ";" + sFilename;
+                }
+                sFilenames = sFilenames.Substring(1);
+            }
+
         }
 
         private void BtnOpenFile_Click(object sender, RoutedEventArgs e)
         {
             Microsoft.Win32.OpenFileDialog openFileDialog = new Microsoft.Win32.OpenFileDialog();
             //openFileDialog.InitialDirectory = "c://";
-            openFileDialog.FileName = "MYFileSave";
+            openFileDialog.FileName = "";
             openFileDialog.DefaultExt = ".png";
             openFileDialog.Filter = "Image documents (.png)|*.png";
             openFileDialog.RestoreDirectory = true;

@@ -8,7 +8,7 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="610" Width="630">
 
-    <Grid>
+    <Grid x:Name="mainGrid">
         <ToolBarTray  Background="White">
             <ToolBar Band="1" BandIndex="1" Margin="0,0,-427.735,-44.851">
                 <ToolBar.Background>
@@ -27,7 +27,7 @@
                         </ToolTip>
                     </Button.ToolTip>
                 </Button>
-                <Button x:Name="LoadXMLbtn" Click="btn_AddTileToMap">
+                <Button x:Name="LoadXMLbtn" Click="BtnLoadXML_click">
                     <Image Source="AddFile.png" Width="32" Height="32"></Image>
                     <Button.ToolTip>
                         <ToolTip>
@@ -133,25 +133,6 @@
             </ToolBar>
 
         </ToolBarTray>
-
-        <GridSplitter HorizontalAlignment="Left" Height="521.515" Margin="0,47.485,0,0" VerticalAlignment="Top" Width="257.63" Background="#FFA6A5A5" d:IsHidden="True"/>
-
-
-
-
-        <TextBlock HorizontalAlignment="Left" Height="311.515" Margin="10,47.485,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="324.37" d:IsHidden="True"><Run Text=""/><InlineUIContainer>
-                <UniformGrid x:Name="GridSheet" Rows="6" Columns="6" Height="264" Width="315.333">
-                    <Button Content="Rohit" Grid.Row="0" Grid.Column="2" Background="White" BorderBrush="White" />
-                    <Button Content="Rohit"  Grid.Row="0" Grid.Column="2" Background="White" BorderBrush="White" />
-                    <Button Content="Rohit"  Grid.Row="0" Grid.Column="2" Background="White" BorderBrush="White" />
-                    <Button Content="Rohit"  Grid.Row="0" Grid.Column="2" Background="White" BorderBrush="White" />
-                    <Button Content="Rohit"  Grid.Row="0" Grid.Column="2" Background="White" BorderBrush="White" />
-                    <Button Content="Rohit"  Grid.Row="0" Grid.Column="2" Background="White" BorderBrush="White" />
-                    <Button Content="Rohit"  Grid.Row="0" Grid.Column="2" Background="White" BorderBrush="White" />
-                    <Button Content="Rohit"  Grid.Row="0" Grid.Column="2" Background="White" BorderBrush="White" />
-                    <Button Content="Rohit"  Grid.Row="0" Grid.Column="2" Background="White" BorderBrush="White" />
-                </UniformGrid>
-            </InlineUIContainer></TextBlock>
         <Border BorderBrush="#FF707070" BorderThickness="5" Margin="324.37,47.485,10,10" Background="#00808080"/>
         <Border BorderBrush="#FF707070" BorderThickness="5" Margin="324.37,434.333,10,10"/>
         <ListBox x:Name="SpriteSheetList" Margin="329.37,52.485,14,0" Height="381.848" VerticalAlignment="Top"
@@ -182,7 +163,7 @@
                 <StackPanel>
                     <Grid>
 
-                        <CheckBox x:Name="Layer1CheckBox" IsChecked="False" VerticalAlignment="Center" Margin="0,4.284,0,80.282" Checked="menuLoadTiles"></CheckBox>
+                        <CheckBox x:Name="Layer1CheckBox" IsChecked="True" VerticalAlignment="Center" Margin="0,4.284,0,80.282"></CheckBox>
                         <CheckBox x:Name="Layer2CheckBox" IsChecked="True" VerticalAlignment="Center" Margin="0,29.284,0,55.283"></CheckBox>
                         <CheckBox x:Name="Layer3CheckBox" IsChecked="True" VerticalAlignment="Center" Margin="0,54.284,0,30.283"></CheckBox>
                         <CheckBox x:Name="CollisionCheckBox" IsChecked="True" VerticalAlignment="Top" Margin="0,79.284,0,0"></CheckBox>
@@ -194,9 +175,8 @@
             </ToolBar>
         </ListBox>
 
-        <Grid  Name="gridMapTiles" ShowGridLines="{Binding Path=ShowPending, Mode=TwoWay}"
-                              ScrollViewer.VerticalScrollBarVisibility="Visible" 
-                              ScrollViewer.HorizontalScrollBarVisibility="Visible" Margin="0,52.485,297.63,0"/>
-        <TextBlock Text="{Binding Path=BoundWidth, Mode=TwoWay}" HorizontalAlignment="Left" Height="72.167" Margin="53,439.333,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="163.5"/>
+        <Grid  Name="gridMapTiles" PreviewMouseLeftButtonDown="menuLoadTiles"  MaxHeight="{Binding Path=SetGridHeight, Mode=TwoWay}" MaxWidth="{Binding Path=SetGridWidth, Mode=TwoWay}" ShowGridLines="{Binding Path=ShowPending, Mode=TwoWay}"
+                              ScrollViewer.VerticalScrollBarVisibility="Auto" 
+                              ScrollViewer.HorizontalScrollBarVisibility="Auto" Margin="0,52.485,297.63,0" Opacity="0.995" UseLayoutRounding="False" HorizontalAlignment="Center" VerticalAlignment="Center"/>
     </Grid>
 </Window>

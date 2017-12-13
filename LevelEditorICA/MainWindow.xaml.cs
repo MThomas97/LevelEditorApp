@@ -183,7 +183,7 @@ namespace LevelEditorICA
             openFileDialog.Filter = "Image documents (.png)|*.png";
             openFileDialog.RestoreDirectory = true;
             Nullable<bool> result = openFileDialog.ShowDialog();
-
+           
             if (result.HasValue && result.Value)
             {
 
@@ -195,22 +195,28 @@ namespace LevelEditorICA
                 }
                 sFilenames = sFilenames.Substring(1);
 
-                
+
+                BitmapImage bitmap = new BitmapImage(new Uri(sFilenames,UriKind.Relative));
 
                 string filename = openFileDialog.FileName;
-                for (int i = 0; i < rows; i++)
-                    for (int j = 0; j < cols; j++)
+                for (int i = 0; i < bitmap.PixelHeight / tileSize; i++)
+                    for (int j = 0; j < bitmap.PixelWidth / tileSize; j++)
                     {
-                        panelImages.Add(new Image()
+                        panelImages.Add(new Image
                         {
-                            Source = new CroppedBitmap(new BitmapImage(new Uri(@sFilenames, UriKind.Relative)),
+                            Source = new CroppedBitmap(bitmap,
                                                  new Int32Rect(j * tileSize, i * tileSize, tileSize, tileSize)),
                             Height = tileSize
-                        });
+
+
+                             
+
+                    });
+                        
                         //panelImages.Last().MouseLeftButtonDown += Image_MouseDown;
                     }
                 SpriteSheetList.ItemsSource = new ObservableCollection<Image>(panelImages);
-
+                
                
             }
 

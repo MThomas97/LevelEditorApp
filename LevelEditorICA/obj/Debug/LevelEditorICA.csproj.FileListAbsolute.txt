@@ -43,3 +43,6 @@ C:\Users\Michael\Documents\GitHub\LevelEditorApp\LevelEditorICA\obj\Debug\LevelE
 C:\Users\Michael\Documents\GitHub\LevelEditorApp\LevelEditorICA\obj\Debug\LevelEditorICA.csproj.CoreCompileInputs.cache
 C:\Users\Michael\Documents\GitHub\LevelEditorApp\LevelEditorICA\obj\Debug\LevelEditorICA.exe
 C:\Users\Michael\Documents\GitHub\LevelEditorApp\LevelEditorICA\obj\Debug\LevelEditorICA.pdb
+C:\Users\Michael\Documents\GitHub\LevelEditorApp\LevelEditorICA\obj\Debug\Simple Styles.baml
+C:\Users\Michael\Documents\GitHub\LevelEditorApp\LevelEditorICA\obj\Debug\App.baml
+C:\Users\Michael\Documents\GitHub\LevelEditorApp\LevelEditorICA\bin\Debug\Xceed.Wpf.Toolkit.dll

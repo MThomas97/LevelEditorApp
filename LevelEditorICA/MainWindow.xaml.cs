@@ -40,6 +40,29 @@ namespace LevelEditorICA
             //////////////////////////////////////////////////////////////
             #endregion
 
+
+            mapTileCanvas.Children.Clear();
+            for (int i = 0; i < gridHeight; i++)
+                for (int j = 0; j < gridWidth; j++)
+                {
+                    Button btn = new Button();
+
+                    Canvas can = new Canvas();
+
+                    Rectangle rect_ = new Rectangle();
+                    rect_.Width = tileSize;
+                    rect_.Height = tileSize;
+                    rect_.Fill = new SolidColorBrush(Color.FromRgb(255, 0, 0));
+                    mapTileCanvas.Children.Add(rect_);
+                    Canvas.SetLeft(rect_, tileSize * j + j * 1);
+                    Canvas.SetTop(rect_, tileSize * i + i * 1);
+
+
+
+
+
+                }
+
         }
 
         // my config file
@@ -58,6 +81,10 @@ namespace LevelEditorICA
 
         int gridHeight = 5;
         int gridWidth = 5;
+
+        List<Rectangle> tiles = new List<Rectangle>();
+
+        private Rectangle rect = new Rectangle();
  
         // this is a special type of collection which automatically updates the UI element it is bound to 
         ObservableCollection<Image> panelImages = new ObservableCollection<Image>();
@@ -104,8 +131,35 @@ namespace LevelEditorICA
                 if (gridWidth != value)
                 {
                     gridWidth = value;
-                   
+                    mapTileCanvas.MaxWidth = gridWidth * tileSize;
+
                     OnPropertyChanged();
+
+                    mapTileCanvas.Children.Clear();
+                    for (int i = 0; i < gridHeight; i++)
+                        for (int j = 0; j < gridWidth; j++)
+                        {
+                            Button btn = new Button();
+
+                            Canvas can = new Canvas();
+
+                            Rectangle rect_ = new Rectangle();
+                            rect_.Width = tileSize;
+                            rect_.Height = tileSize;
+                            rect_.Fill = new SolidColorBrush(Color.FromRgb(255, 0, 0));
+                            mapTileCanvas.Children.Add(rect_);
+                            Canvas.SetLeft(rect_, tileSize * j + j * 1);
+                            Canvas.SetTop(rect_, tileSize * i + i * 1);
+                            
+
+
+
+
+                        }
+
+                    
+                    
+
                 }
             }
         }
@@ -118,18 +172,40 @@ namespace LevelEditorICA
                 if (gridHeight != value)
                 {
                     gridHeight = value;
-                    
+                    mapTileCanvas.MaxHeight = gridHeight * tileSize;
+
                     OnPropertyChanged();
+
+                    mapTileCanvas.Children.Clear();
+                    for (int i = 0; i < gridHeight; i++)
+                        for (int j = 0; j < gridWidth; j++)
+                        {
+                            Button btn = new Button();
+
+                            Canvas can = new Canvas();
+
+                            Rectangle rect_ = new Rectangle();
+                            rect_.Width = tileSize;
+                            rect_.Height = tileSize;
+                            rect_.Fill = new SolidColorBrush(Color.FromRgb(255, 0, 0));
+                            mapTileCanvas.Children.Add(rect_);
+                            Canvas.SetLeft(rect_, tileSize * j + j * 1);
+                            Canvas.SetTop(rect_, tileSize * i + i * 1);
+
+
+
+
+
+                        }
                 }
             }
         }
 
         public int SetGridHeight
         {
-            get { return gridHeight * tileSize; }
+            get { return  gridHeight * tileSize; }
             set
             {
-                
             }
         }
 
@@ -154,7 +230,7 @@ namespace LevelEditorICA
 
         private void menuLoadTiles(object sender, RoutedEventArgs e)
         {
-            if (gridMapTiles != null)
+            /*if (gridMapTiles != null)
             {
                 
                 gridMapTiles.Children.Clear();
@@ -183,20 +259,28 @@ namespace LevelEditorICA
                         for (int j = 0; j < gridWidth; j++)
                         {
                             Button btn = new Button();
-                            
+
+                            Canvas can = new Canvas();
+
                             if (gridWidth < j)
-                                gridMapTiles.Children.Remove(btn);
-                            
-                            Grid.SetRow(btn, i);
-                            Grid.SetColumn(btn, j);
-                            gridMapTiles.Children.Add(btn);
-                            
-                        
-                    }
+                                gridMapTiles.Children.Remove(can);
+
+                        Grid.SetRow(can, i);
+                        Grid.SetColumn(can, j);
+                        gridMapTiles.Children.Add(can);*/
+                        /*Rectangle rect_ = new Rectangle();
+                        rect_.Width = tileSize;
+                        rect_.Height = tileSize;
+                        rect_.Fill = new SolidColorBrush(Color.FromRgb(255, 0, 0));
+                        mapTileCanvas.Children.Add(rect_);
+                        Canvas.SetLeft(rect_, gridWidth * j + j * 1);
+                        Canvas.SetTop(rect_, gridHeight * i + i * 1);*/
+
+                    //}
                 
                 //}
 
-            }
+            //}
         }
 
         private void BtnLoadXML_click(object sender, RoutedEventArgs e)
@@ -256,11 +340,8 @@ namespace LevelEditorICA
                             Source = new CroppedBitmap(bitmap,
                                                  new Int32Rect(j * tileSize, i * tileSize, tileSize, tileSize)),
                             Height = tileSize
-
-
-                             
-
                     });
+
                         
                         //panelImages.Last().MouseLeftButtonDown += Image_MouseDown;
                     }
@@ -286,6 +367,5 @@ namespace LevelEditorICA
         }
 
         
-
     }
 }

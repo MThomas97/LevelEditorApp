@@ -46,3 +46,6 @@ C:\Users\Michael\Documents\GitHub\LevelEditorApp\LevelEditorICA\obj\Debug\LevelE
 C:\Users\Michael\Documents\GitHub\LevelEditorApp\LevelEditorICA\obj\Debug\Simple Styles.baml
 C:\Users\Michael\Documents\GitHub\LevelEditorApp\LevelEditorICA\obj\Debug\App.baml
 C:\Users\Michael\Documents\GitHub\LevelEditorApp\LevelEditorICA\bin\Debug\Xceed.Wpf.Toolkit.dll
+C:\Users\s6099298\Documents\GitHub\LevelEditorApp\LevelEditorICA\bin\Debug\Xceed.Wpf.Toolkit.dll
+C:\Users\s6099298\Documents\GitHub\LevelEditorApp\LevelEditorICA\obj\Debug\Simple Styles.baml
+C:\Users\s6099298\Documents\GitHub\LevelEditorApp\LevelEditorICA\obj\Debug\App.baml

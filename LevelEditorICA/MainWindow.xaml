@@ -175,8 +175,11 @@
             </ToolBar>
         </ListBox>
 
-        <Grid  Name="gridMapTiles" PreviewMouseLeftButtonDown="menuLoadTiles"  MaxHeight="{Binding Path=SetGridHeight, Mode=TwoWay}" MaxWidth="{Binding Path=SetGridWidth, Mode=TwoWay}" ShowGridLines="{Binding Path=ShowPending, Mode=TwoWay}"
+
+        <ScrollViewer HorizontalAlignment="Right" VerticalAlignment="Bottom" Height="516.515" HorizontalScrollBarVisibility="Visible" Margin="0,0,307.37,15">
+            <Grid  Name="gridMapTiles" PreviewMouseLeftButtonDown="menuLoadTiles"  MaxHeight="{Binding Path=SetGridHeight, Mode=TwoWay}" MaxWidth="{Binding Path=SetGridWidth, Mode=TwoWay}" ShowGridLines="{Binding Path=ShowPending, Mode=TwoWay}"
                               ScrollViewer.VerticalScrollBarVisibility="Auto" 
-                              ScrollViewer.HorizontalScrollBarVisibility="Auto" Margin="0,52.485,297.63,0" Opacity="0.995" UseLayoutRounding="False" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                              ScrollViewer.HorizontalScrollBarVisibility="Auto" Margin="0,52.485,297.63,0" Opacity="0.995" UseLayoutRounding="False" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        </ScrollViewer>
     </Grid>
 </Window>

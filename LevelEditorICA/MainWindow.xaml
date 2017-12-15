@@ -136,16 +136,13 @@
 
         <Border BorderBrush="#FF707070" BorderThickness="5" Margin="324.37,47.485,10,10" Background="#00808080"/>
         <Border BorderBrush="#FF707070" BorderThickness="5" Margin="324.37,434.333,10,10"/>
-        <ListView x:Name="SpriteSheetList" Margin="329.37,52.485,14,0" Height="381.848" VerticalAlignment="Top"
-            Grid.Row="2" Grid.Column="3" 
-                              ScrollViewer.VerticalScrollBarVisibility="Visible" 
-                              ScrollViewer.HorizontalScrollBarVisibility="Disabled">
-            <ListBox.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <WrapPanel Orientation="Horizontal"></WrapPanel>
-                </ItemsPanelTemplate>
-            </ListBox.ItemsPanel>
-        </ListView>
+
+            <ScrollViewer  Margin="329.37,0,14,144.667" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible" Height="380.848" VerticalAlignment="Bottom">
+            <Canvas  MouseLeftButtonDown="Mouse_overCanvas" x:Name="SpriteSheetList" VerticalAlignment="Top" 
+                              ScrollViewer.VerticalScrollBarVisibility="Auto" 
+                              ScrollViewer.HorizontalScrollBarVisibility="Auto" RenderTransformOrigin="0.5,0.5" Height="380.848" Width="278.63" />
+        </ScrollViewer>
+        
         <ListBox x:Name="MapList" Margin="329.37,439.333,14,15">
             <ToolBar Height="104.667" Width="252.63" Background="White" Header="Map Width:&#xA;&#xA;Map Height:&#xA;&#xA;Tile Width:">
                 <StackPanel Margin="0,0,0,0">
@@ -176,9 +173,9 @@
             </ToolBar>
         </ListBox>
 
-        <ScrollViewer HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="516.515" HorizontalScrollBarVisibility="Visible" Margin="0,0,0,15" Width="327">
+        <ScrollViewer HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="516.515" HorizontalScrollBarVisibility="Visible" Margin="0,0,0,15" Width="319.37">
 
-            <Grid MaxHeight="{Binding Path=SetGridHeight}" MaxWidth="{Binding Path=SetGridWidth, Mode=TwoWay}" HorizontalAlignment="Left" VerticalAlignment="Top" Height="492.329">
+            <Grid MaxHeight="{Binding Path=SetGridHeight}" MaxWidth="{Binding Path=SetGridWidth, Mode=TwoWay}" HorizontalAlignment="Left" VerticalAlignment="Top" Height="492.329" Width="309.37">
                 <Canvas x:Name="mapTileCanvas" Margin="0,52.485,307.37,41.376" Background="White" ScrollViewer.HorizontalScrollBarVisibility="Visible" Grid.IsSharedSizeScope="True"/>
             </Grid>
         </ScrollViewer>

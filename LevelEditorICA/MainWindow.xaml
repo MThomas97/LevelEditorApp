@@ -38,7 +38,7 @@
                         </ToolTip>
                     </Button.ToolTip>
                 </Button>
-                <Button x:Name="SaveXMLbtn">
+                <Button x:Name="SaveXMLbtn" Click="btn_AddTileToMap">
                     <Image Source="SaveAs.png" Width="32" Height="32"></Image>
                     <Button.ToolTip>
                         <ToolTip>
@@ -137,12 +137,13 @@
         <Border BorderBrush="#FF707070" BorderThickness="5" Margin="324.37,47.485,10,10" Background="#00808080"/>
         <Border BorderBrush="#FF707070" BorderThickness="5" Margin="324.37,434.333,10,10"/>
 
-            <ScrollViewer  Margin="329.37,0,14,144.667" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible" Height="380.848" VerticalAlignment="Bottom">
-            <Canvas  MouseLeftButtonDown="Mouse_overCanvas" x:Name="SpriteSheetList" VerticalAlignment="Top" 
-                              ScrollViewer.VerticalScrollBarVisibility="Auto" 
-                              ScrollViewer.HorizontalScrollBarVisibility="Auto" RenderTransformOrigin="0.5,0.5" Height="380.848" Width="278.63" />
-        </ScrollViewer>
-        
+        <!--<ScrollViewer Grid.Row="1" Grid.Column="3" Margin="329.37,0,14,144.667" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" Height="380.848" VerticalAlignment="Bottom">-->
+        <ListView ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Disabled" x:Name="SpriteSheetList" 
+                                Height="380.848" Width="278.63" Margin="329,53,14,145">
+
+        </ListView>
+        <!--</ScrollViewer>-->
+
         <ListBox x:Name="MapList" Margin="329.37,439.333,14,15">
             <ToolBar Height="104.667" Width="252.63" Background="White" Header="Map Width:&#xA;&#xA;Map Height:&#xA;&#xA;Tile Width:">
                 <StackPanel Margin="0,0,0,0">
@@ -173,10 +174,28 @@
             </ToolBar>
         </ListBox>
 
-        <ScrollViewer HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="516.515" HorizontalScrollBarVisibility="Visible" Margin="0,0,0,15" Width="319.37">
+        <ScrollViewer HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="460" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible" Margin="0,0,0,15" Width="319">
 
-            <Grid MaxHeight="{Binding Path=SetGridHeight}" MaxWidth="{Binding Path=SetGridWidth, Mode=TwoWay}" HorizontalAlignment="Left" VerticalAlignment="Top" Height="492.329" Width="309.37">
-                <Canvas x:Name="mapTileCanvas" Margin="0,52.485,307.37,41.376" Background="White" ScrollViewer.HorizontalScrollBarVisibility="Visible" Grid.IsSharedSizeScope="True"/>
+            <Grid ShowGridLines="True"  HorizontalAlignment="Left" VerticalAlignment="Top" Height="{Binding Path=SetGridHeight, Mode=TwoWay}" Width="{Binding Path=SetGridWidth, Mode=TwoWay}">
+                <Canvas x:Name="mapTileCanvas" MouseUp="canvasMap_MouseUp" MouseMove="canvasMap_MouseMove"
+                 Width="{Binding Path=SetGridWidth, Mode=TwoWay}"  Height="{Binding Path=SetGridHeight, Mode=TwoWay}" Margin="0,52,0,42" ScrollViewer.HorizontalScrollBarVisibility="Visible" Grid.IsSharedSizeScope="True" HorizontalAlignment="Left" VerticalAlignment="Top">
+                    <Canvas.Background>
+                        <DrawingBrush TileMode="Tile"
+                              Viewport="0,0,32,32" 
+                              ViewportUnits="Absolute">
+                            <DrawingBrush.Drawing>
+                                <GeometryDrawing>
+                                    <GeometryDrawing.Geometry>
+                                        <RectangleGeometry Rect="0,0,32,32"/>
+                                    </GeometryDrawing.Geometry>
+                                    <GeometryDrawing.Pen>
+                                        <Pen Brush="Gray" Thickness="1"/>
+                                    </GeometryDrawing.Pen>
+                                </GeometryDrawing>
+                            </DrawingBrush.Drawing>
+                        </DrawingBrush>
+                    </Canvas.Background>
+                </Canvas>
             </Grid>
         </ScrollViewer>
     </Grid>

@@ -1,6 +1,7 @@
 ﻿using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using DLL_DBWorker.Entities;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -26,19 +27,49 @@ namespace LevelEditorICA
     /// </summary>
     public partial class MainWindow : INotifyPropertyChanged
     {
+        private MapCell[,] map = new MapCell[5, 5];
+
+        private BitmapImage activeTexture;
+        private BitmapImage secondTexture;
+
+        public BitmapImage ActiveTexture
+        {
+            get { return activeTexture; }
+            set { activeTexture = value; }
+        }
+        public BitmapImage SecondTexture
+        {
+            get { return secondTexture; }
+            set { secondTexture = value; }
+        }
+
         public MainWindow()
         {
+            Width = 400;
+            for (int i = 0; i < gridHeight; i++)
+                for (int j = 0; j < gridWidth; j++)
+                {
+                    this.map[i, j] = new MapCell();
+                    this.map[i, j].X0 = j * 32;
+                    this.map[i, j].Y0 = i * 32;
+                    this.map[i, j].X1 = (j + 1) * 32;
+                    this.map[i, j].Y1 = (i + 1) * 32;
+                }
             DataContext = this;
             InitializeComponent();
 
             #region IMAGES
             //////////////////////////////////////////////////////////////
             // initialise the source of tiles
-            //SpriteSheetList.ItemsSource = panelImages;
+            SpriteSheetList.ItemsSource = panelImages;
             // initialise the source of map's tiles
             //SpriteSheetList.ItemsSource = mapImages;
             //////////////////////////////////////////////////////////////
             #endregion
+
+            
+                
+            
 
 
             mapTileCanvas.Children.Clear();
@@ -52,10 +83,10 @@ namespace LevelEditorICA
                     Rectangle rect_ = new Rectangle();
                     rect_.Width = tileSize;
                     rect_.Height = tileSize;
-                    rect_.Fill = new SolidColorBrush(Color.FromRgb(255, 0, 0));
+                    rect_.Fill = new SolidColorBrush(Color.FromRgb(0, 0, 0));
                     //mapTileCanvas.Children.Add(rect_);
-                    Canvas.SetLeft(rect_, tileSize * j + j * 1);
-                    Canvas.SetTop(rect_, tileSize * i + i * 1);
+                    //Canvas.SetLeft(rect_, tileSize * j + j * 1);
+                    //Canvas.SetTop(rect_, tileSize * i + i * 1);
 
 
 
@@ -138,11 +169,11 @@ namespace LevelEditorICA
                 if (gridWidth != value)
                 {
                     gridWidth = value;
-                    mapTileCanvas.MaxWidth = gridWidth * tileSize;
+                    mapTileCanvas.Width = gridWidth * tileSize;
 
                     OnPropertyChanged();
 
-                    mapTileCanvas.Children.Clear();
+                    //mapTileCanvas.Children.Clear();
                     for (int i = 0; i < gridHeight; i++)
                         for (int j = 0; j < gridWidth; j++)
                         {
@@ -155,8 +186,8 @@ namespace LevelEditorICA
                             rect_.Height = tileSize;
                             rect_.Fill = new SolidColorBrush(Color.FromRgb(255, 0, 0));
                             //mapTileCanvas.Children.Add(rect_);
-                            Canvas.SetLeft(rect_, tileSize * j + j * 1);
-                            Canvas.SetTop(rect_, tileSize * i + i * 1);
+                            //Canvas.SetLeft(rect_, tileSize * j + j * 1);
+                            //Canvas.SetTop(rect_, tileSize * i + i * 1);
 
                             
 
@@ -180,11 +211,11 @@ namespace LevelEditorICA
                 if (gridHeight != value)
                 {
                     gridHeight = value;
-                    mapTileCanvas.MaxHeight = gridHeight * tileSize;
+                    mapTileCanvas.Height = gridHeight * tileSize;
 
                     OnPropertyChanged();
 
-                    mapTileCanvas.Children.Clear();
+                    //mapTileCanvas.Children.Clear();
                     for (int i = 0; i < gridHeight; i++)
                         for (int j = 0; j < gridWidth; j++)
                         {
@@ -197,8 +228,8 @@ namespace LevelEditorICA
                             rect_.Height = tileSize;
                             rect_.Fill = new SolidColorBrush(Color.FromRgb(255, 0, 0));
                             //mapTileCanvas.Children.Add(rect_);
-                            Canvas.SetLeft(rect_, tileSize * j + j * 1);
-                            Canvas.SetTop(rect_, tileSize * i + i * 1);
+                            //Canvas.SetLeft(rect_, tileSize * j + j * 1);
+                            //Canvas.SetTop(rect_, tileSize * i + i * 1);
                             
                             
 
@@ -237,6 +268,92 @@ namespace LevelEditorICA
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
             }
           
+        }
+
+        private void DrawTexture(object sender, double x, double y)
+        {
+            if (SpriteSheetList.SelectedItem != null)
+            {
+                for (int i = 0; i < 5; i++)
+                    for (int j = 0; j < 5; j++)
+                    {
+                        if (x >= this.map[i, j].X0 && x <= this.map[i, j].X1
+                            && y >= this.map[i, j].Y0 && y <= this.map[i, j].Y1)
+                        {
+                            //MessageBox.Show($"({this.map[i, j].X0};{this.map[i, j].Y0}) — ({this.map[i, j].X1};{this.map[i, j].Y1})");
+                            Image img = new Image();
+                            //img.Source = 
+                            img.Source = ((Image)SpriteSheetList.SelectedItem).Source;
+                            img.Width = tileSize;
+                            img.Height = tileSize;
+                            Canvas.SetLeft(img, this.map[i, j].X0);
+                            Canvas.SetTop(img, this.map[i, j].Y0);
+                            Canvas.SetZIndex(img, 1);
+                            
+                            this.mapTileCanvas.Children.Add(img);
+                            break;
+                        }
+                    }
+            }
+        }
+        private void DeleteTexture(object sender, double x, double y)
+        {
+            if (SpriteSheetList.SelectedItem != null)
+            {
+                for (int i = 0; i < 5; i++)
+                    for (int j = 0; j < 5; j++)
+                    {
+                        if (x >= this.map[i, j].X0 && x <= this.map[i, j].X1
+                            && y >= this.map[i, j].Y0 && y <= this.map[i, j].Y1)
+                        {
+                            //MessageBox.Show($"({this.map[i, j].X0};{this.map[i, j].Y0}) — ({this.map[i, j].X1};{this.map[i, j].Y1})");
+                            Image img = new Image();
+                            //img.Source = 
+                            img.Source = ((Image)SpriteSheetList.SelectedItem).Source;
+                            img.Width = tileSize;
+                            img.Height = tileSize;
+                            Canvas.SetLeft(img, this.map[i, j].X0);
+                            Canvas.SetTop(img, this.map[i, j].Y0);
+                            Canvas.SetZIndex(img, 0); //layer
+                            this.mapTileCanvas.Children.Add(img);
+
+                            break;
+                        }
+                    }
+            }
+        }
+
+        private void btn_AddTileToMap(object sender, RoutedEventArgs e)
+        {
+            if (SpriteSheetList.SelectedItem != null)
+            {
+                //Image img = new Image();
+                ////img.Source = 
+                //img.Source = ((Image)SpriteSheetList.SelectedItem).Source; Height = tileSize;
+                //mapTileCanvas.Children.Add(img);
+                mapTileCanvas.Children.Add(new Image() { Source = ((Image)SpriteSheetList.SelectedItem).Source, Height = tileSize });
+            }
+        }
+
+        private void canvasMap_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            var clickedPoint = e.GetPosition((Canvas)sender);
+            double x = clickedPoint.X;
+            double y = clickedPoint.Y;
+            if (e.ChangedButton == MouseButton.Left)
+                this.DrawTexture(sender, x, y);
+            else if (e.ChangedButton == MouseButton.Right)
+                this.DeleteTexture(sender, x, y);
+        }
+        private void canvasMap_MouseMove(object sender, MouseEventArgs e)
+        {
+            var clickedPoint = e.GetPosition((Canvas)sender);
+            double x = clickedPoint.X;
+            double y = clickedPoint.Y;
+            if (e.LeftButton == MouseButtonState.Pressed)
+                this.DrawTexture(sender, x, y);
+            else if (e.RightButton == MouseButtonState.Pressed)
+                this.DeleteTexture(sender, x, y);
         }
 
         private void menuLoadTiles(object sender, RoutedEventArgs e)
@@ -372,25 +489,25 @@ namespace LevelEditorICA
                 for (int i = 0; i < bitmap.PixelHeight / tileSize; i++)
                     for (int j = 0; j < bitmap.PixelWidth / tileSize; j++)
                     {
-                        Image newImg = new Image()
+                        panelImages.Add(new Image()
                         {
                            
                             Source = new CroppedBitmap(bitmap,
                                                  new Int32Rect(j * tileSize, i * tileSize, tileSize, tileSize)),
                             Height = tileSize
-                        };
-                       
-                        SpriteSheetList.Children.Add(newImg);
-                        Canvas.SetTop(newImg, i * tileSize);
-                        Canvas.SetLeft(newImg, j * tileSize); 
-                        images.Add(newImg);
+                        });
+
+                        SpriteSheetList.ItemsSource = new ObservableCollection<Image>(panelImages);
+                        //Canvas.SetTop(newImg, i * tileSize);
+                       // Canvas.SetLeft(newImg, j * tileSize); 
+                        //images.Add(newImg);
                         //newImg.MouseLeftButtonDown += Image_MouseDown;
 
-                        GetImg = newImg;
+                        //GetImg = newImg;
                         
                         
                         //panelImages.Last().MouseLeftButtonDown += Image_MouseDown;
-                        collectionImages.Add(newImg);
+                        //collectionImages.Add(newImg);
                     }
                 //SpriteSheetList.ItemsSource = new ObservableCollection<Image>(panelImages);
                
@@ -455,16 +572,21 @@ namespace LevelEditorICA
             this.Close();
         }
 
+        private void menuLoadTiles(object sender, RoutedPropertyChangedEventArgs<object> e)
+        {
+
+        }
+
         // add the selected tile to the map
         //private void btn_AddTileToMap(object sender, RoutedEventArgs e)
         //{
         //    if (SpriteSheetList.SelectedItem != null)
         //    {
         //        mapImages.Add(new Image() { Source = ((Image)SpriteSheetList.SelectedItem).Source, Height = tileSize });
-                
+
         //    }
         //}
 
-        
+
     }
 }

@@ -18,7 +18,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Collections.ObjectModel;
 using System.Xml;
-
+using System.Xml.Linq;
 
 namespace LevelEditorICA
 {
@@ -31,6 +31,20 @@ namespace LevelEditorICA
 
         private BitmapImage activeTexture;
         private BitmapImage secondTexture;
+
+        #region Implementation data
+
+        private string m_workingDirectory = "";                                       //!< The working directory for default images.
+        private string m_terrainInit = "";
+        string sFilenames = "";
+        private bool Collidable = false;
+        private List<Image> Collectionlist = new List<Image>();
+        private List<Image> CanvasList = new List<Image>();
+        private List<int> mapIndex = new List<int>();
+       
+        //private LevelGrid m_canvas = null;
+
+        #endregion
 
         public BitmapImage ActiveTexture
         {
@@ -269,7 +283,8 @@ namespace LevelEditorICA
             }
           
         }
-
+        Image img2 = new Image();
+       
         private void DrawTexture(object sender, double x, double y)
         {
             if (SpriteSheetList.SelectedItem != null)
@@ -282,18 +297,27 @@ namespace LevelEditorICA
                         {
                             //MessageBox.Show($"({this.map[i, j].X0};{this.map[i, j].Y0}) — ({this.map[i, j].X1};{this.map[i, j].Y1})");
                             Image img = new Image();
+                            Image img2 = new Image();
+                            
                             //img.Source = 
                             img.Source = ((Image)SpriteSheetList.SelectedItem).Source;
+                            //img2.Source = panelImages[1].Source; //how to get the index
                             img.Width = tileSize;
                             img.Height = tileSize;
                             Canvas.SetLeft(img, this.map[i, j].X0);
                             Canvas.SetTop(img, this.map[i, j].Y0);
                             Canvas.SetZIndex(img, 1);
-                            
                             this.mapTileCanvas.Children.Add(img);
+                            this.CanvasList.Add(img);
+                            this.mapIndex.Add(i + j + i * 4);
+                            
                             break;
+
+                            
+
                         }
                     }
+                
             }
         }
         private void DeleteTexture(object sender, double x, double y)
@@ -306,8 +330,10 @@ namespace LevelEditorICA
                         if (x >= this.map[i, j].X0 && x <= this.map[i, j].X1
                             && y >= this.map[i, j].Y0 && y <= this.map[i, j].Y1)
                         {
+                            
                             //MessageBox.Show($"({this.map[i, j].X0};{this.map[i, j].Y0}) — ({this.map[i, j].X1};{this.map[i, j].Y1})");
                             Image img = new Image();
+                            Image img2 = new Image();
                             //img.Source = 
                             img.Source = ((Image)SpriteSheetList.SelectedItem).Source;
                             img.Width = tileSize;
@@ -316,6 +342,7 @@ namespace LevelEditorICA
                             Canvas.SetTop(img, this.map[i, j].Y0);
                             Canvas.SetZIndex(img, 0); //layer
                             this.mapTileCanvas.Children.Add(img);
+                            
 
                             break;
                         }
@@ -331,7 +358,8 @@ namespace LevelEditorICA
                 ////img.Source = 
                 //img.Source = ((Image)SpriteSheetList.SelectedItem).Source; Height = tileSize;
                 //mapTileCanvas.Children.Add(img);
-                mapTileCanvas.Children.Add(new Image() { Source = ((Image)SpriteSheetList.SelectedItem).Source, Height = tileSize });
+                mapTileCanvas.Children.Insert(10,new Image() { Source = ((Image)SpriteSheetList.SelectedItem).Source, Height = tileSize });
+                
             }
         }
 
@@ -411,37 +439,262 @@ namespace LevelEditorICA
             //}
         }
 
+        private bool LoadLevel()
+        {
+            // Create the dialog box.
+            OpenFileDialog openBox = new OpenFileDialog();
+            openBox.Filter = "XML Files|*.xml";
+
+            // Proceed with saving if necessary.
+            if (openBox.ShowDialog() == true)
+            {
+                try
+                {
+                    // Attempt to load the XML.
+                    XDocument xml = XDocument.Load(openBox.FileName);
+
+                    if (CreateFromXML(xml))
+                    {
+                        return true;
+                    }
+
+                    //throw new FileFormatException("Unable to load from XML, likely a corrupt file.");
+                }
+
+                catch (Exception error)
+                {
+                    string message = "An error occurred whilst attempting to load.\nError details: " + error.Message;
+                    MessageBox.Show(this, message, "Error", MessageBoxButton.OK);
+                }
+            }
+
+            return false;
+        }
+
         private void BtnLoadXML_click(object sender, RoutedEventArgs e)
         {
-            Microsoft.Win32.OpenFileDialog openFileDialog = new Microsoft.Win32.OpenFileDialog();
-            //openFileDialog.InitialDirectory = "c://";
-            openFileDialog.FileName = "";
-            openFileDialog.DefaultExt = ".XML";
-            openFileDialog.Filter = "XML files (.XML)|*.XML";
-            openFileDialog.RestoreDirectory = true;
-            Nullable<bool> result = openFileDialog.ShowDialog();
+            LoadLevel();
 
-            if (result.HasValue && result.Value)
-            {
-                   
-                string sFilenames = "";
+            Image newimg = new Image();
 
-                foreach (string sFilename in openFileDialog.FileNames)
+            Image newimg2 = new Image();
+
+            mapTileCanvas.Children.Clear();
+
+            newimg.Source = panelImages[5].Source;
+
+           
+            for (int i = 0; i < gridHeight; i++)
+                for (int j = 0; j < gridWidth; j++)
                 {
-                    sFilenames += ";" + sFilename;
+                    Image img = new Image();
+                   
+                    //img.Source = 
+                    //img.Source = panelImages[2].Source;
+                    img.Width = tileSize;
+                    img.Height = tileSize;
+                    Canvas.SetLeft(img, tileSize * j + j * 1);
+                    Canvas.SetTop(img, tileSize * i + i * 1);
+                    Canvas.SetZIndex(img, 0); //layer
+                    mapTileCanvas.Children.Add(img);
                 }
-                sFilenames = sFilenames.Substring(1);
-            }
+            newimg.Width = tileSize;
+            newimg.Height = tileSize;
+            Canvas.SetLeft(newimg, tileSize);
+            Canvas.SetTop(newimg, tileSize);
+            mapTileCanvas.Children.Insert(7, newimg);
+            
+            //mapTileCanvas.Children.Add(newimg);
+
+            //mapTileCanvas.Children.Add(newimg);
+            //mapTileCanvas.Children.Insert(0, newimg);
+            //Microsoft.Win32.OpenFileDialog openFileDialog = new Microsoft.Win32.OpenFileDialog();
+            ////openFileDialog.InitialDirectory = "c://";
+            //openFileDialog.FileName = "";
+            //openFileDialog.DefaultExt = ".XML";
+            //openFileDialog.Filter = "XML files (.XML)|*.XML";
+            //openFileDialog.RestoreDirectory = true;
+            //Nullable<bool> result = openFileDialog.ShowDialog();
+
+            //if (result.HasValue && result.Value)
+            //{
+
+            //    string sFilenames = "";
+
+            //    foreach (string sFilename in openFileDialog.FileNames)
+            //    {
+            //        sFilenames += ";" + sFilename;
+            //    }
+            //    sFilenames = sFilenames.Substring(1);
+            //}
 
         }
 
+        /// <summary>
+        /// The save event which writes all data to storage.
+        /// </summary>
+        private void Menu_SaveClick(object sender, RoutedEventArgs e)
+        {
+            SaveToXML();
+            
+        }
 
+        private bool SaveToXML()
+        {
+            //Create a dialog box.
+            SaveFileDialog saveFile = new SaveFileDialog();
+            saveFile.Filter = "XML Files|*.xml";
+
+            //Process with saving if necessary.
+            if(saveFile.ShowDialog() == true)
+            {
+                try
+                {
+                    //Attempt to save the XML.
+                    XDocument xml = GenerateXML();
+                    xml.Save(saveFile.FileName);
+                    return true;
+                }
+
+                catch(Exception error)
+                {
+                    string message = "An error occurred attempting to save:" + error.Message;
+                    MessageBox.Show(this, message, "Error", MessageBoxButton.OK);
+                }
+            }
+            return false;
+        }
+
+        public bool CreateFromXML(XDocument xml)
+        {
+            // Attempt the loading process.
+            try
+            {
+                // Obtain the working set of data.
+                XElement root = xml.Root;
+                UpdateDimensions(Convert.ToInt16(root.Attribute("Width").Value), Convert.ToInt16(root.Attribute("Height").Value));
+                
+
+                XElement gameTiles = root.Element("GameTiles");
+                SetCanvas(Convert.ToInt16(gameTiles.Attribute("MapIndex").Value), Convert.ToInt16(gameTiles.Attribute("ImageIndex").Value));
+
+                // Attempt to construct the grid.
+                //ClearData();
+                //FillFromXElement(root.Element("GameTiles"));
+
+                //UpdateGridVisuals();
+
+                return true; // ?
+            }
+
+            catch (Exception)
+            {
+                // Take care of illegal data by simply clearing it.
+                //ResetToSafeValues();
+                ClearData();
+                //UpdateGridVisuals();
+            }
+
+            return false;
+        }
+
+        private void SetCanvas(int MapIndex, int ImageIndex)
+        {
+            Image newimg = new Image();
+
+            newimg.Source = panelImages[ImageIndex].Source;
+
+            mapTileCanvas.Children.Insert(MapIndex, newimg);
+
+        }
+
+        private void UpdateDimensions(int newWidth, int newHeight)
+        {
+            gridWidth = newWidth;
+            gridHeight = newHeight;
+            
+        }
+
+        private void ClearData()
+        {
+            //m_data.Clear();
+            //m_images.Clear();
+
+            //mapTileCanvas.Children.Clear();
+            //m_grid.ColumnDefinitions.Clear();
+            //m_grid.RowDefinitions.Clear();
+        }
+
+        public XDocument GenerateXML()
+        {
+            // Create the document and add the grid parameters.
+            XDocument xml = new XDocument();
+
+            XElement canvas = new XElement("Canvas",
+                                            new XAttribute("Width", gridWidth), new XAttribute("Height", gridHeight));
+
+            // Traverse the deep maze of game tiles producing the XML.
+            //XElement gameTiles = new XElement("GameTiles", new XAttribute("Sprite", sFilenames), new XAttribute(");
+
+
+            //XElement gameTiles = new XElement("GameTiles");
+            //XElement gameTiles = new XElement("GameTiles");
+
+
+            CanvasList.Count();
+
+
+
+
+
+            //for (int k = 0; mapTileCanvas.Children[k] == null; k++)
+            //{
+            //    XElement gameTiles2 = new XElement("GameTiles");
+            //    canvas.Add(gameTiles2);
+            //}
+
+
+
+            // Traverse the deep maze of game tiles producing the XML.
+            for (int i = 0; i < CanvasList.Count(); i++)
+            {
+                XElement gameTiles = new XElement("GameTiles", new XAttribute("Sprite", sFilenames), new XAttribute("MapIndex", mapIndex[i]),
+                   new XAttribute("ImageIndex", 1), new XAttribute("IsCollidable", Collidable), new XAttribute("Layer", 0));
+
+                canvas.Add(gameTiles);
+
+            } 
+
+
+            //foreach (UIElement element in mapTileCanvas.Children)
+            //{
+            //    XElement gameTiles2 = new XElement("GameTiles");
+            //    canvas.Add(gameTiles2);
+            //}
+
+
+
+            //}
+
+            //foreach (Nullable in mapTileCanvas.Children)
+            //{
+
+            //    gameTiles.c(gameTile);
+            //}
+
+            // Finally construct the XML document, ready to return.
+
+            //xml.Add(canvas);
+
+            //canvas.Add(gameTiles);
+            xml.Add(canvas);
+
+            return xml;
+        }
 
         private void Mouse_overCanvas(object sender, MouseEventArgs e)
         {
             Point point = e.GetPosition((UIElement) sender);
-
-            
 
             //Rectangle rect_ = new Rectangle();
             //rect_.Width = tileSize;
@@ -470,21 +723,18 @@ namespace LevelEditorICA
             if (result.HasValue && result.Value)
             {
 
-                string sFilenames = "";
+                
 
                 foreach (string sFilename in openFileDialog.FileNames)
                 {
                     sFilenames += ";" + sFilename;
                 }
                 sFilenames = sFilenames.Substring(1);
-
                 
                 BitmapImage bitmap = new BitmapImage(new Uri(sFilenames,UriKind.Relative));
 
                 SpriteSheetList.Height = bitmap.PixelHeight;
                 SpriteSheetList.Width = bitmap.PixelWidth;
-
-
                 string filename = openFileDialog.FileName;
                 for (int i = 0; i < bitmap.PixelHeight / tileSize; i++)
                     for (int j = 0; j < bitmap.PixelWidth / tileSize; j++)
@@ -497,7 +747,17 @@ namespace LevelEditorICA
                             Height = tileSize
                         });
 
+                        Collectionlist.Add(new Image()
+                        {
+
+                            Source = new CroppedBitmap(bitmap,
+                                                 new Int32Rect(j * tileSize, i * tileSize, tileSize, tileSize)),
+                            Height = tileSize
+                        });
+
                         SpriteSheetList.ItemsSource = new ObservableCollection<Image>(panelImages);
+                        
+                        
                         //Canvas.SetTop(newImg, i * tileSize);
                        // Canvas.SetLeft(newImg, j * tileSize); 
                         //images.Add(newImg);

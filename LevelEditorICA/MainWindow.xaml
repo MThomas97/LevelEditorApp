@@ -38,7 +38,7 @@
                         </ToolTip>
                     </Button.ToolTip>
                 </Button>
-                <Button x:Name="SaveXMLbtn" Click="btn_AddTileToMap">
+                <Button x:Name="SaveXMLbtn" Click="Menu_SaveClick">
                     <Image Source="SaveAs.png" Width="32" Height="32"></Image>
                     <Button.ToolTip>
                         <ToolTip>
@@ -107,7 +107,7 @@
                     </RadioButton.ToolTip>
                 </RadioButton>
                 <Separator></Separator>
-                <Button Click="menuLoadTiles">
+                <Button Click="btn_AddTileToMap">
                     <Image Source="FileNew.png" Width="32" Height="32"></Image>
                     <Button.ToolTip>
                         <ToolTip>
@@ -174,11 +174,12 @@
             </ToolBar>
         </ListBox>
 
-        <ScrollViewer HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="460" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible" Margin="0,0,0,15" Width="319">
+        <ScrollViewer HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="460" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible" Margin="5,0,0,66" Width="319">
 
             <Grid ShowGridLines="True"  HorizontalAlignment="Left" VerticalAlignment="Top" Height="{Binding Path=SetGridHeight, Mode=TwoWay}" Width="{Binding Path=SetGridWidth, Mode=TwoWay}">
                 <Canvas x:Name="mapTileCanvas" MouseUp="canvasMap_MouseUp" MouseMove="canvasMap_MouseMove"
                  Width="{Binding Path=SetGridWidth, Mode=TwoWay}"  Height="{Binding Path=SetGridHeight, Mode=TwoWay}" Margin="0,52,0,42" ScrollViewer.HorizontalScrollBarVisibility="Visible" Grid.IsSharedSizeScope="True" HorizontalAlignment="Left" VerticalAlignment="Top">
+                    
                     <Canvas.Background>
                         <DrawingBrush TileMode="Tile"
                               Viewport="0,0,32,32" 

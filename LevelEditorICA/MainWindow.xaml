@@ -73,7 +73,7 @@
                     </Button.ToolTip>
                 </Button>
                 <Separator></Separator>
-                <RadioButton IsChecked="True">
+                <RadioButton x:Name="Draw_Button" IsChecked="True">
                     <Image Source="write.png" Width="32" Height="32"></Image>
                     <RadioButton.ToolTip>
                         <ToolTip>
@@ -95,7 +95,7 @@
                         </ToolTip>
                     </RadioButton.ToolTip>
                 </RadioButton>
-                <RadioButton>
+                <RadioButton x:Name="Erase_button">
                     <Image Source="Eraser.png" Width="32" Height="32"></Image>
                     <RadioButton.ToolTip>
                         <ToolTip>
@@ -107,7 +107,7 @@
                     </RadioButton.ToolTip>
                 </RadioButton>
                 <Separator></Separator>
-                <Button Click="btn_AddTileToMap">
+                <Button Click="Menu_NewClick">
                     <Image Source="FileNew.png" Width="32" Height="32"></Image>
                     <Button.ToolTip>
                         <ToolTip>
@@ -153,19 +153,19 @@
                 </StackPanel>
                 <Separator Margin="10,0,0,0"></Separator>
                 <StackPanel>
-                    <RadioButton Margin="5" GroupName="layer" Content="Layer 1" IsChecked="True"/>
-                    <RadioButton Margin="5" GroupName="layer" Content="Layer 2" />
-                    <RadioButton Margin="5" GroupName="layer" Content="Layer 3" />
-                    <RadioButton Margin="5" GroupName="layer" Content="Collision" />
+                    <RadioButton x:Name="layer1Button" Margin="5" GroupName="layer" Content="Layer 1" IsChecked="True"/>
+                    <RadioButton x:Name="layer2Button" Margin="5" GroupName="layer" Content="Layer 2" />
+                    <RadioButton x:Name="layer3Button" Margin="5" GroupName="layer" Content="Layer 3" />
+                    <RadioButton x:Name="CollisionButton" Margin="5" GroupName="layer" Content="Collision" />
 
                 </StackPanel>
                 <StackPanel>
                     <Grid>
 
-                        <CheckBox x:Name="Layer1CheckBox" IsChecked="True" VerticalAlignment="Center" Margin="0,4.284,0,80.282"></CheckBox>
-                        <CheckBox x:Name="Layer2CheckBox" IsChecked="True" VerticalAlignment="Center" Margin="0,29.284,0,55.283"></CheckBox>
-                        <CheckBox x:Name="Layer3CheckBox" IsChecked="True" VerticalAlignment="Center" Margin="0,54.284,0,30.283"></CheckBox>
-                        <CheckBox x:Name="CollisionCheckBox" IsChecked="True" VerticalAlignment="Top" Margin="0,79.284,0,0"></CheckBox>
+                        <CheckBox x:Name="Layer1CheckBox" Click="UpdateCanvas" IsChecked="{Binding Path=Layer1Check, Mode=TwoWay}" VerticalAlignment="Center" Margin="0,4.284,0,80.282"></CheckBox>
+                        <CheckBox x:Name="Layer2CheckBox" Click="UpdateCanvas" IsChecked="{Binding Path=Layer2Check, Mode=TwoWay}" VerticalAlignment="Center" Margin="0,29.284,0,55.283"></CheckBox>
+                        <CheckBox x:Name="Layer3CheckBox" Click="UpdateCanvas" IsChecked="{Binding Path=Layer3Check, Mode=TwoWay}" VerticalAlignment="Center" Margin="0,54.284,0,30.283"></CheckBox>
+                        <CheckBox x:Name="CollisionCheckBox" Click="UpdateCanvas" IsChecked="{Binding Path=CollisionCheck, Mode=TwoWay}" VerticalAlignment="Top" Margin="0,79.284,0,0"></CheckBox>
                     </Grid>
                 </StackPanel>
 
@@ -174,12 +174,12 @@
             </ToolBar>
         </ListBox>
 
-        <ScrollViewer HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="460" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible" Margin="5,0,0,66" Width="319">
+        <ScrollViewer HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="511" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible" Margin="5,0,0,15" Width="319">
 
             <Grid ShowGridLines="True"  HorizontalAlignment="Left" VerticalAlignment="Top" Height="{Binding Path=SetGridHeight, Mode=TwoWay}" Width="{Binding Path=SetGridWidth, Mode=TwoWay}">
-                <Canvas x:Name="mapTileCanvas" MouseUp="canvasMap_MouseUp"
+                <Canvas  x:Name="mapTileCanvas" MouseLeftButtonDown="canvasMap_MouseDown" MouseUp="canvasMap_MouseUp" MouseMove="canvasMap_MouseMove"  
                  Width="{Binding Path=SetGridWidth, Mode=TwoWay}"  Height="{Binding Path=SetGridHeight, Mode=TwoWay}" Margin="0,52,0,42" ScrollViewer.HorizontalScrollBarVisibility="Visible" Grid.IsSharedSizeScope="True" HorizontalAlignment="Left" VerticalAlignment="Top">
-                    
+
                     <Canvas.Background>
                         <DrawingBrush TileMode="Tile"
                               Viewport="0,0,32,32" 
@@ -187,7 +187,7 @@
                             <DrawingBrush.Drawing>
                                 <GeometryDrawing>
                                     <GeometryDrawing.Geometry>
-                                        <RectangleGeometry Rect="0,0,32,32"/>
+                                        <RectangleGeometry Rect="0,0,34,34"/>
                                     </GeometryDrawing.Geometry>
                                     <GeometryDrawing.Pen>
                                         <Pen Brush="Gray" Thickness="1"/>

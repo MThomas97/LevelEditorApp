@@ -19,23 +19,25 @@ using System.Windows.Shapes;
 using System.Collections.ObjectModel;
 using System.Xml;
 using System.Xml.Linq;
+using System.IO;
 
 namespace LevelEditorICA
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
+    /// 
     public partial class MainWindow : INotifyPropertyChanged
     {
-        private MapCell[,] map = new MapCell[5, 5];
+        private MapCell[,] map = new MapCell[1000, 1000];
+
+
 
         private BitmapImage activeTexture;
         private BitmapImage secondTexture;
 
         #region Implementation data
 
-        private string m_workingDirectory = "";                                       //!< The working directory for default images.
-        private string m_terrainInit = "";
         string sFilenames = "";
         private bool Collidable = false;
         private List<Image> Collectionlist = new List<Image>();
@@ -43,6 +45,16 @@ namespace LevelEditorICA
         private List<int> mapPositionX = new List<int>();
         private List<int> mapPositionY = new List<int>();
         private List<int> ImageIndex = new List<int>();
+        private List<bool> CollisionIndex = new List<bool>();
+        private List<int> LayerIndex = new List<int>();
+        private List<UIElement> UIElementIndex = new List<UIElement>();
+        private bool layer1check = true;
+        private bool layer2check = true;
+        private bool layer3check = true;
+        private bool collisioncheck = true;
+        private int gridHeight = 5;
+        private int gridWidth = 5;
+
         //private LevelGrid m_canvas = null;
 
         #endregion
@@ -61,8 +73,8 @@ namespace LevelEditorICA
         public MainWindow()
         {
             Width = 400;
-            for (int i = 0; i < gridHeight; i++)
-                for (int j = 0; j < gridWidth; j++)
+            for (int i = 0; i < 1000; i++)
+                for (int j = 0; j < 1000; j++)
                 {
                     this.map[i, j] = new MapCell();
                     this.map[i, j].X0 = j * 32;
@@ -125,8 +137,7 @@ namespace LevelEditorICA
         // (shouldnt this be stored in the config file?!)
         private int tileSize = 32;
 
-        private int gridHeight = 5;
-        private int gridWidth = 5;
+       
 
         List<Image> images = new List<Image>();
 
@@ -161,20 +172,39 @@ namespace LevelEditorICA
             }
         }
 
-        public bool ShowPending
+        public bool Layer1Check
         {
-            get { return this.showPending; }
-            set { this.showPending = value; }
+            get { return this.layer1check; }
+            set { this.layer1check = value; }
         }
 
-        private bool showPending = true;
-
-        private void checkBoxShowPending_CheckedChanged(object sender, EventArgs e)
+        public bool Layer2Check
         {
-            //checking showPending.Value here.  It's always false
-            showPending = true;
+            get { return this.layer2check; }
+            set { this.layer2check = value; }
         }
 
+        public bool Layer3Check
+        {
+            get { return this.layer3check; }
+            set { this.layer3check = value; }
+        }
+
+        public bool CollisionCheck
+        {
+            get { return this.collisioncheck; }
+            set { this.collisioncheck = value; }
+        }
+
+        //private void checkBoxShowPending_CheckedChanged(object sender, EventArgs e)
+        //{
+        //    //checking showPending.Value here.  It's always false
+        //    showPending = true;
+        //}
+
+        
+
+        
 
         public int BoundWidth
         {
@@ -187,6 +217,18 @@ namespace LevelEditorICA
                     mapTileCanvas.Width = gridWidth * tileSize;
 
                     OnPropertyChanged();
+
+                    
+
+                    //for (int i = 0; i < gridHeight; i++)
+                    //    for (int j = 0; j < gridWidth; j++)
+                    //    {
+                    //        this.map[i, j] = new MapCell();
+                    //        this.map[i, j].X0 = j * 32;
+                    //        this.map[i, j].Y0 = i * 32;
+                    //        this.map[i, j].X1 = (j + 1) * 32;
+                    //        this.map[i, j].Y1 = (i + 1) * 32;
+                    //    }
 
                     //mapTileCanvas.Children.Clear();
                     for (int i = 0; i < gridHeight; i++)
@@ -230,6 +272,16 @@ namespace LevelEditorICA
 
                     OnPropertyChanged();
 
+                    for (int i = 0; i < 1000; i++)
+                        for (int j = 0; j < 1000; j++)
+                        {
+                            this.map[i, j] = new MapCell();
+                            this.map[i, j].X0 = j * 32;
+                            this.map[i, j].Y0 = i * 32;
+                            this.map[i, j].X1 = (j + 1) * 32;
+                            this.map[i, j].Y1 = (i + 1) * 32;
+                        }
+
                     //mapTileCanvas.Children.Clear();
                     for (int i = 0; i < gridHeight; i++)
                         for (int j = 0; j < gridWidth; j++)
@@ -242,6 +294,7 @@ namespace LevelEditorICA
                             rect_.Width = tileSize;
                             rect_.Height = tileSize;
                             rect_.Fill = new SolidColorBrush(Color.FromRgb(255, 0, 0));
+
                             //mapTileCanvas.Children.Add(rect_);
                             //Canvas.SetLeft(rect_, tileSize * j + j * 1);
                             //Canvas.SetTop(rect_, tileSize * i + i * 1);
@@ -284,14 +337,15 @@ namespace LevelEditorICA
             }
           
         }
+        
         Image img2 = new Image();
        
         private void DrawTexture(object sender, double x, double y)
         {
             if (SpriteSheetList.SelectedItem != null)
             {
-                for (int i = 0; i < 5; i++)
-                    for (int j = 0; j < 5; j++)
+                for (int i = 0; i < gridHeight; i++)
+                    for (int j = 0; j < gridWidth; j++)
                     {
                         if (x >= this.map[i, j].X0 && x <= this.map[i, j].X1
                             && y >= this.map[i, j].Y0 && y <= this.map[i, j].Y1)
@@ -299,28 +353,62 @@ namespace LevelEditorICA
                             //MessageBox.Show($"({this.map[i, j].X0};{this.map[i, j].Y0}) — ({this.map[i, j].X1};{this.map[i, j].Y1})");
                             Image img = new Image();
                             
-                                //img.Source = 
-                                img.Source = ((Image)SpriteSheetList.SelectedItem).Source;
-                                
-                                img.Width = tileSize;
-                                img.Height = tileSize;
+                             
+                            img.Source = ((Image)SpriteSheetList.SelectedItem).Source;
+
                             
-                                Canvas.SetLeft(img, this.map[i, j].X0);
-                                Canvas.SetTop(img, this.map[i, j].Y0);
+
+                            img.Width = tileSize;
+                            img.Height = tileSize;
+                            
+                            Canvas.SetLeft(img, this.map[i, j].X0);
+                            Canvas.SetTop(img, this.map[i, j].Y0);
+
+                            if (layer1Button.IsChecked == true)
+                            {
                                 Canvas.SetZIndex(img, 1);
-                                this.mapTileCanvas.Children.Add(img);
-                                this.CanvasList.Add(img);
-                                this.mapPositionX.Add(this.map[i, j].X0);
-                                this.mapPositionY.Add(this.map[i, j].Y0);
-                                ImageIndex.Add(SpriteSheetList.SelectedIndex);
+                                img.Uid = "Layer 1";
+                                LayerIndex.Add(1);
+                                CollisionIndex.Add(false);
+                            }
+                            if (layer2Button.IsChecked == true)
+                            {
+                                Canvas.SetZIndex(img, 2);
+                                img.Uid = "Layer 2";
+                                LayerIndex.Add(2);
+                                CollisionIndex.Add(false);
+                            }
+                            if (layer3Button.IsChecked == true)
+                            {
+                                Canvas.SetZIndex(img, 3);
+                                img.Uid = "Layer 3";
+                                LayerIndex.Add(3);
+                                CollisionIndex.Add(false);
+                            }
+                            if (CollisionButton.IsChecked == true)
+                            {
+                                Canvas.SetZIndex(img, 4);
+                                img.Uid = "Collision";
+                                CollisionIndex.Add(true);
+                                LayerIndex.Add(4);
+                            }
                             
-                            
+                            //Canvas.SetZIndex(img, 1);
+                            this.mapTileCanvas.Children.Add(img);
+                            this.CanvasList.Add(img);
+                            this.mapPositionX.Add(this.map[i, j].X0);
+                            this.mapPositionY.Add(this.map[i, j].Y0);
+                            ImageIndex.Add(SpriteSheetList.SelectedIndex);
+
+
                             break;
 
                             
 
                         }
+                        
                     }
+
                 
             }
         }
@@ -328,29 +416,140 @@ namespace LevelEditorICA
         {
             if (SpriteSheetList.SelectedItem != null)
             {
-                for (int i = 0; i < 5; i++)
-                    for (int j = 0; j < 5; j++)
+                for (int i = 0; i < 1000; i++)
+                    for (int j = 0; j < 1000; j++)
                     {
                         if (x >= this.map[i, j].X0 && x <= this.map[i, j].X1
                             && y >= this.map[i, j].Y0 && y <= this.map[i, j].Y1)
                         {
+                           
+                                //MessageBox.Show($"({this.map[i, j].X0};{this.map[i, j].Y0}) — ({this.map[i, j].X1};{this.map[i, j].Y1})");
+                                Image img = new Image();
+                                Image img2 = new Image();
+                                //img.Source = 
+                                //img.Source = ((Image)SpriteSheetList.SelectedItem).Source;
+                                img.Width = tileSize;
+                                img.Height = tileSize;
+                                
+                                img.Source = null;
+                                Rectangle rect_ = new Rectangle();
+                                rect_.Width = tileSize;
+                                rect_.Height = tileSize;
+                                rect_.Fill = new SolidColorBrush(Color.FromRgb(255, 255, 255));
+                            //Canvas.SetZIndex(rect_, 5);
+
+
+                            foreach (UIElement element in mapTileCanvas.Children)
+                            {
+                                if (mapTileCanvas != null)
+                                {
+                                    if(layer1Button.IsChecked == true)
+                                    { 
+                                        if (element.IsMouseDirectlyOver && element.Uid == "Layer 1")
+                                        {
+                                            element.Uid = "Delete";
+                                        
+                                            //UIElementIndex.Add(element);
+                                            element.Visibility = Visibility.Hidden;
+
+                                        }
+                                    }
+                                    else if (layer2Button.IsChecked == true)
+                                    {
+                                        if (element.IsMouseDirectlyOver && element.Uid == "Layer 2")
+                                        {
+                                            element.Uid = "Delete";
+
+                                            //UIElementIndex.Add(element);
+                                            element.Visibility = Visibility.Hidden;
+
+                                        }
+                                    }
+
+                                    else if (layer3Button.IsChecked == true)
+                                    {
+                                        if (element.IsMouseDirectlyOver && element.Uid == "Layer 3")
+                                        {
+                                            element.Uid = "Delete";
+
+                                            //UIElementIndex.Add(element);
+                                            element.Visibility = Visibility.Hidden;
+
+                                        }
+                                    }
+
+                                    else if (CollisionButton.IsChecked == true)
+                                    {
+                                        if (element.IsMouseDirectlyOver && element.Uid == "Collision")
+                                        {
+                                            element.Uid = "Delete";
+
+                                            //UIElementIndex.Add(element);
+                                            element.Visibility = Visibility.Hidden;
+
+                                        }
+                                    }
+                                }
+                            }
                             
-                            //MessageBox.Show($"({this.map[i, j].X0};{this.map[i, j].Y0}) — ({this.map[i, j].X1};{this.map[i, j].Y1})");
-                            Image img = new Image();
-                            Image img2 = new Image();
-                            //img.Source = 
-                            img.Source = ((Image)SpriteSheetList.SelectedItem).Source;
-                            img.Width = tileSize;
-                            img.Height = tileSize;
-                            Canvas.SetLeft(img, this.map[i, j].X0);
-                            Canvas.SetTop(img, this.map[i, j].Y0);
-                            Canvas.SetZIndex(img, 0); //layer
-                            this.mapTileCanvas.Children.Add(img);
                             
 
+                            //foreach (UIElement el in UIElementIndex)
+                            //{
+
+                            //    mapTileCanvas.Children.Remove(el);
+
+                            //}
+                            
+
+
+
+
+                            //Canvas.SetLeft(rect_, this.map[i, j].X0);
+                            //Canvas.SetTop(rect_, this.map[i, j].Y0);
+
+
+                            //layer
+                            //this.mapTileCanvas.Children.Add(img);
+                            //this.mapTileCanvas.Children.Add(img);
+                            //this.mapTileCanvas.Children.Add(rect_);
+
                             break;
+                            
                         }
                     }
+            }
+        }
+
+        private void UpdateCanvas(object sender, RoutedEventArgs e)
+        {
+            foreach(UIElement element in mapTileCanvas.Children)
+            {
+                if(Layer1Check == false && element.Uid == "Layer 1")
+                    element.Visibility = Visibility.Hidden;
+
+                else if(Layer1Check == true && element.Uid == "Layer 1")
+                         element.Visibility = Visibility.Visible;
+
+                if (Layer2Check == false && element.Uid == "Layer 2")
+                    element.Visibility = Visibility.Hidden;
+
+                else if (Layer2Check == true && element.Uid == "Layer 2")
+                    element.Visibility = Visibility.Visible;
+
+                if (Layer3Check == false && element.Uid == "Layer 3")
+                    element.Visibility = Visibility.Hidden;
+
+                else if (Layer3Check == true && element.Uid == "Layer 3")
+                    element.Visibility = Visibility.Visible;
+
+                if (CollisionCheck == false && element.Uid == "Collision")
+                    element.Visibility = Visibility.Hidden;
+
+                else if (CollisionCheck == true && element.Uid == "Collision")
+                    element.Visibility = Visibility.Visible;
+
+                
             }
         }
 
@@ -372,9 +571,9 @@ namespace LevelEditorICA
             var clickedPoint = e.GetPosition((Canvas)sender);
             double x = clickedPoint.X;
             double y = clickedPoint.Y;
-            if (e.ChangedButton == MouseButton.Left)
+            if (e.ChangedButton == MouseButton.Left && Draw_Button.IsChecked == true)
                 this.DrawTexture(sender, x, y);
-            else if (e.ChangedButton == MouseButton.Right)
+            else if (e.ChangedButton == MouseButton.Left && Erase_button.IsChecked == true)
                 this.DeleteTexture(sender, x, y);
         }
         private void canvasMap_MouseMove(object sender, MouseEventArgs e)
@@ -382,9 +581,19 @@ namespace LevelEditorICA
             var clickedPoint = e.GetPosition((Canvas)sender);
             double x = clickedPoint.X;
             double y = clickedPoint.Y;
-            if (e.LeftButton == MouseButtonState.Pressed)
+            if (e.LeftButton == MouseButtonState.Pressed && Draw_Button.IsChecked == true)
                 this.DrawTexture(sender, x, y);
-            else if (e.RightButton == MouseButtonState.Pressed)
+            else if (e.LeftButton == MouseButtonState.Pressed && Erase_button.IsChecked == true)
+                this.DeleteTexture(sender, x, y);
+        }
+
+        private void canvasMap_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            var clickedPoint = e.GetPosition((Canvas)sender);
+            double x = clickedPoint.X;
+            double y = clickedPoint.Y;
+            
+            if (e.LeftButton == MouseButtonState.Pressed && Erase_button.IsChecked == true)
                 this.DeleteTexture(sender, x, y);
         }
 
@@ -407,7 +616,7 @@ namespace LevelEditorICA
                         return true;
                     }
 
-                    //throw new FileFormatException("Unable to load from XML, likely a corrupt file.");
+                    throw new FileFormatException("Unable to load from XML, likely a corrupt file.");
                 }
 
                 catch (Exception error)
@@ -422,67 +631,8 @@ namespace LevelEditorICA
 
         private void BtnLoadXML_click(object sender, RoutedEventArgs e)
         {
-            
-
-            
-
-            //Image newimg2 = new Image();
-
-            //mapTileCanvas.Children.Clear();
-
-            
-
-            //newimg.Source = panelImages[5].Source;
-
-
-            //for (int i = 0; i < gridHeight; i++)
-            //    for (int j = 0; j < gridWidth; j++)
-            //    {
-            //        Image img = new Image();
-
-            //        //img.Source = 
-                    
-            //        img.Width = tileSize;
-            //        img.Height = tileSize;
-            //        Canvas.SetLeft(img, this.map[i, j].X0);
-            //        Canvas.SetTop(img, this.map[i, j].Y0);
-            //        Canvas.SetZIndex(img, 0); //layer
-            //        this.mapTileCanvas.Children.Add(img);
-            //    }
-
-
-
             LoadLevel();
-            //newimg.Width = tileSize;
-            //newimg.Height = tileSize;
-            //Canvas.SetLeft(newimg, this.map[1, 1].X0);
-            //Canvas.SetTop(newimg, this.map[1, 1].Y0);
-            //mapTileCanvas.Children.Insert(9, newimg);
-
-            //mapTileCanvas.Children.Add(newimg);
-
-            //mapTileCanvas.Children.Add(newimg);
-            //mapTileCanvas.Children.Insert(0, newimg);
-            //Microsoft.Win32.OpenFileDialog openFileDialog = new Microsoft.Win32.OpenFileDialog();
-            ////openFileDialog.InitialDirectory = "c://";
-            //openFileDialog.FileName = "";
-            //openFileDialog.DefaultExt = ".XML";
-            //openFileDialog.Filter = "XML files (.XML)|*.XML";
-            //openFileDialog.RestoreDirectory = true;
-            //Nullable<bool> result = openFileDialog.ShowDialog();
-
-            //if (result.HasValue && result.Value)
-            //{
-
-            //    string sFilenames = "";
-
-            //    foreach (string sFilename in openFileDialog.FileNames)
-            //    {
-            //        sFilenames += ";" + sFilename;
-            //    }
-            //    sFilenames = sFilenames.Substring(1);
-            //}
-
+            
         }
 
         /// <summary>
@@ -491,7 +641,11 @@ namespace LevelEditorICA
         private void Menu_SaveClick(object sender, RoutedEventArgs e)
         {
             SaveToXML();
-            
+        }
+
+        private void Menu_NewClick(object sender, RoutedEventArgs e)
+        {
+            ClearData();
         }
 
         private bool SaveToXML()
@@ -538,7 +692,7 @@ namespace LevelEditorICA
                 
                 
                 // Attempt to construct the grid.
-                //ClearData();
+                ClearData();
                 FillFromXElement(root.Element("GameTiles"), root);
 
                 //UpdateGridVisuals();
@@ -563,59 +717,64 @@ namespace LevelEditorICA
             IEnumerable<XElement> elementRoot = root.Elements("GameTiles");
 
 
-            mapTileCanvas.Children.Clear();
+            
             // Attempt to read all the data.
-            foreach (XElement element in elementRoot)
-            {
 
+            //foreach (UIElement ui in mapTileCanvas.Children)
+            //{
+            //    mapTileCanvas.Children.Remove(ui);
 
-                if (mapTileCanvas == null)
+            //}
 
+            //foreach (Image img in CanvasList)
+            //{
+            //    CanvasList.Remove(img);
+            //}
+
+            BitmapImage bitmap = new BitmapImage(new Uri(gameTiles.Attribute("Sprite").Value, UriKind.Relative));
+
+            SpriteSheetList.Height = bitmap.PixelHeight;
+            SpriteSheetList.Width = bitmap.PixelWidth;
+            for (int i = 0; i < bitmap.PixelHeight / tileSize; i++)
+                for (int j = 0; j < bitmap.PixelWidth / tileSize; j++)
                 {
-                    BitmapImage bitmap = new BitmapImage(new Uri(gameTiles.Attribute("Sprite").Value, UriKind.Relative));
-
-                    SpriteSheetList.Height = bitmap.PixelHeight;
-                    SpriteSheetList.Width = bitmap.PixelWidth;
-                    for (int i = 0; i < bitmap.PixelHeight / tileSize; i++)
-                        for (int j = 0; j < bitmap.PixelWidth / tileSize; j++)
-                        {
 
 
-                            panelImages.Add(new Image()
-                            {
+                    panelImages.Add(new Image()
+                    {
 
-                                Source = new CroppedBitmap(bitmap,
-                                                     new Int32Rect(j * tileSize, i * tileSize, tileSize, tileSize)),
-                                Height = tileSize
-                            });
+                        Source = new CroppedBitmap(bitmap,
+                                             new Int32Rect(j * tileSize, i * tileSize, tileSize, tileSize)),
+                        Height = tileSize
+                    });
 
-                        }
+                    SpriteSheetList.ItemsSource = new ObservableCollection<Image>(panelImages);
                 }
 
+            foreach (XElement element in elementRoot)
+            {
+                
                 Image img = new Image();
                 img.Source = panelImages[Convert.ToInt16(element.Attribute("ImageIndex").Value)].Source;
                 img.Width = tileSize;
                 img.Height = tileSize;
+                //this.mapTileCanvas.Children.Add(img);
+
                 Canvas.SetLeft(img, Convert.ToInt16(element.Attribute("PositionX").Value));
                 Canvas.SetTop(img, Convert.ToInt16(element.Attribute("PositionY").Value));
-                mapTileCanvas.Children.Add(img);
-                //mapTileCanvas.Children.Insert(10, img);
+                this.mapTileCanvas.Children.Add(img);
+                this.CanvasList.Add(img);
+                this.mapPositionX.Add(Convert.ToInt16(element.Attribute("PositionX").Value));
+                this.mapPositionY.Add(Convert.ToInt16(element.Attribute("PositionY").Value));
+                ImageIndex.Add(Convert.ToInt16(element.Attribute("ImageIndex").Value));
+                LayerIndex.Add(Convert.ToInt16(element.Attribute("Layer").Value));
+                CollisionIndex.Add(Convert.ToBoolean(element.Attribute("IsCollidable").Value));
+                
+                //this.mapTileCanvas.Children.Add(img);
 
 
             }
             
-
-        }
-
-        private void SetCanvas(int CanvasIndex, int PanelIndex)
-        {
-            //Image newimg = new Image();
-
-            
-
-            //newimg.Source = panelImages[ImageIndex].Source;
-
-            //mapTileCanvas.Children.Insert(MapIndex, newimg);
 
         }
 
@@ -626,16 +785,24 @@ namespace LevelEditorICA
 
         }
 
+
+
         private void ClearData()
         {
-            //m_data.Clear();
-            //m_images.Clear();
+            mapTileCanvas.Children.Clear();
+
+            CanvasList.Clear();
             mapPositionX.Clear();
             mapPositionY.Clear();
-            //panelImages.Clear();
+            ImageIndex.Clear();
+            panelImages.Clear();
             mapTileCanvas.Children.Clear();
-            //m_grid.ColumnDefinitions.Clear();
-            //m_grid.RowDefinitions.Clear();
+            CollisionIndex.Clear();
+            LayerIndex.Clear();
+            //SpriteSheetList.ItemsSource = null; //FIX SO THIS LISTVIEW IS CLEARED TOO
+            //SpriteSheetList.DataContext = null;
+            //SpriteSheetList.Items.Clear();
+            
         }
 
         public XDocument GenerateXML()
@@ -653,13 +820,8 @@ namespace LevelEditorICA
             //XElement gameTiles = new XElement("GameTiles");
             //XElement gameTiles = new XElement("GameTiles");
 
-
+            
             CanvasList.Count();
-
-            VisualTreeHelper.GetChildrenCount(mapTileCanvas);
-
-
-
 
             //for (int k = 0; mapTileCanvas.Children[k] == null; k++)
             //{
@@ -667,17 +829,54 @@ namespace LevelEditorICA
             //    canvas.Add(gameTiles2);
             //}
 
+            //foreach (UIElement element in mapTileCanvas.Children)
+            //{
+            //    if (element.Uid == "Collision")
+            //    {
+            //        Collidable = true;
+            //        CollisionIndex.Add(Collidable);
+            //    }
+            //    else
+            //    {
+            //        Collidable = false;
+            //        CollisionIndex.Add(Collidable);
+            //    }
 
+
+            //}
 
             // Traverse the deep maze of game tiles producing the XML.
-            for (int i = 0; i < CanvasList.Count(); i++)
+            //for (int i = 0; i < CanvasList.Count(); i++)
+            //{
+
+            //    XElement gameTiles = new XElement("GameTiles", new XAttribute("Sprite", sFilenames), new XAttribute("PositionX", mapPositionX[i]),
+            //        new XAttribute("PositionY", mapPositionY[i]), new XAttribute("ImageIndex", ImageIndex[i]), new XAttribute("IsCollidable", CollisionIndex[i]), new XAttribute("Layer", LayerIndex[i]));
+
+            //    canvas.Add(gameTiles);
+
+            //}
+
+            int i = 0;
+
+            foreach (UIElement element in mapTileCanvas.Children)
             {
-                XElement gameTiles = new XElement("GameTiles", new XAttribute("Sprite", sFilenames), new XAttribute("PositionX", mapPositionX[i]), 
-                    new XAttribute("PositionY", mapPositionY[i]), new XAttribute("ImageIndex", ImageIndex[i]), new XAttribute("IsCollidable", Collidable), new XAttribute("Layer", 0));
+                if (element.Uid != "Delete")
+                {
+                    XElement gameTiles = new XElement("GameTiles", new XAttribute("Sprite", sFilenames), new XAttribute("PositionX", mapPositionX[i]),
+                           new XAttribute("PositionY", mapPositionY[i]), new XAttribute("ImageIndex", ImageIndex[i]), new XAttribute("IsCollidable", CollisionIndex[i]), new XAttribute("Layer", LayerIndex[i]));
 
-                canvas.Add(gameTiles);
+                    canvas.Add(gameTiles);
+                    i++;
+                }
+                else if(element.Uid == "Delete")
+                {
+                    i++;
+                }
+                //XElement gameTiles2 = new XElement("GameTiles", new XAttribute("Sprite", sFilenames), new XAttribute("PositionX", 0),
+                //           new XAttribute("PositionY", 0), new XAttribute("ImageIndex", 0), new XAttribute("IsCollidable", false), new XAttribute("Layer", 0));
 
-            } 
+                //canvas.Add(gameTiles2);
+            }
 
 
             //foreach (UIElement element in mapTileCanvas.Children)

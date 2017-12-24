@@ -286,8 +286,8 @@ namespace LevelEditorICA
                                             if (this.map[i, j].X0 == mapPositionX[k] && this.map[i, j].Y0 == mapPositionY[k] && ImageIndex[k] == SpriteSheetList.SelectedIndex && img.Uid == mapTileCanvas.Children[k].Uid)
                                             {
 
-                                                LayerIndex.RemoveAt(LayerIndex.Last());
-                                                CollisionIndex.RemoveAt(LayerIndex.Last());
+                                                LayerIndex.RemoveAt(k);
+                                                CollisionIndex.RemoveAt(k);
 
                                                 return;
                                             }
@@ -322,81 +322,71 @@ namespace LevelEditorICA
                                     {
                                         foreach (UIElement element in mapTileCanvas.Children)
                                         {
-
-                                            if (this.map[i, j].X0 == mapPositionX[k] && this.map[i, j].Y0 == mapPositionY[k] && ImageIndex[k] == SpriteSheetList.SelectedIndex && rect_.Uid == mapTileCanvas.Children[k].Uid)
+                                            if (this.map[i, j].X0 == mapPositionX[k] && this.map[i, j].Y0 == mapPositionY[k] && rect_.Uid == mapTileCanvas.Children[k].Uid)
                                             {
-
                                                 LayerIndex.RemoveAt(k);
                                                 CollisionIndex.RemoveAt(k);
-
+                                        
                                                 return;
                                             }
                                         }
                                     }
                                 }
-
+                                Canvas.SetZIndex(rect_, 4);
                                 Canvas.SetLeft(rect_, this.map[i, j].X0);
                                 Canvas.SetTop(rect_, this.map[i, j].Y0);
-                                Canvas.SetZIndex(rect_, 4);
                                 this.mapTileCanvas.Children.Add(rect_);
                                 this.mapPositionX.Add(this.map[i, j].X0);
                                 this.mapPositionY.Add(this.map[i, j].Y0);
                                 ImageIndex.Add(SpriteSheetList.SelectedIndex);
                             }
-
                             break;
                         }
-                        
-
                     }
-               
-            
         }
         private void DeleteTexture(object sender, double x, double y)
         {
-            
-                            foreach (UIElement element in mapTileCanvas.Children)
-                            {
-                                if (mapTileCanvas != null)
-                                {
-                                    if(layer1Button.IsChecked == true)
-                                    { 
-                                        if (element.IsMouseOver && element.Uid == "Layer 1")
-                                        {
-                                            element.Uid = "Delete";
-                                            element.Visibility = Visibility.Hidden;
-                                        }
-                                    }
-                                    else if (layer2Button.IsChecked == true)
-                                    {
-                                        if (element.IsMouseOver && element.Uid == "Layer 2")
-                                        {
-                                            element.Uid = "Delete";
-                                            element.Visibility = Visibility.Hidden;
-                                        }
-                                    }
+            foreach (UIElement element in mapTileCanvas.Children)
+            {
+                if (mapTileCanvas != null)
+                {
+                    if(layer1Button.IsChecked == true)
+                    { 
+                        if (element.IsMouseOver && element.Uid == "Layer 1")
+                        {
+                            element.Uid = "Delete";
+                            element.Visibility = Visibility.Hidden;
+                        }
+                    }
 
-                                    else if (layer3Button.IsChecked == true)
-                                    {
-                                        if (element.IsMouseOver && element.Uid == "Layer 3")
-                                        {
-                                            element.Uid = "Delete";
-                                            element.Visibility = Visibility.Hidden;
-                                        }
-                                    }
+                    else if (layer2Button.IsChecked == true)
+                    {
+                        if (element.IsMouseOver && element.Uid == "Layer 2")
+                        {
+                            element.Uid = "Delete";
+                            element.Visibility = Visibility.Hidden;
+                        }
+                    }
 
-                                    else if (CollisionButton.IsChecked == true)
-                                    {
-                                        if (element.IsMouseOver && element.Uid == "Collision")
-                                        {
-                                            element.Uid = "Delete";
-                                            element.Visibility = Visibility.Hidden;
-                                        }
-                                    }
-                                }
+                    else if (layer3Button.IsChecked == true)
+                    {
+                        if (element.IsMouseOver && element.Uid == "Layer 3")
+                        {
+                            element.Uid = "Delete";
+                            element.Visibility = Visibility.Hidden;
                             }
+                        }
 
-            
+                    else if (CollisionButton.IsChecked == true)
+                    {
+                        if (element.IsMouseOver && element.Uid == "Collision")
+                        {
+                            element.Uid = "Delete";
+                            element.Visibility = Visibility.Hidden;
+                        }
+                    }
+                }
+            }  
         }
 
         private void UpdateCanvas(object sender, RoutedEventArgs e)
@@ -407,7 +397,7 @@ namespace LevelEditorICA
                     element.Visibility = Visibility.Hidden;
 
                 else if(Layer1Check == true && element.Uid == "Layer 1")
-                         element.Visibility = Visibility.Visible;
+                    element.Visibility = Visibility.Visible;
 
                 if (Layer2Check == false && element.Uid == "Layer 2")
                     element.Visibility = Visibility.Hidden;
@@ -455,7 +445,6 @@ namespace LevelEditorICA
             var clickedPoint = e.GetPosition((Canvas)sender);
             double x = clickedPoint.X;
             double y = clickedPoint.Y;
-            
             if (e.LeftButton == MouseButtonState.Pressed && Erase_button.IsChecked == true)
                 this.DeleteTexture(sender, x, y);
         }
@@ -478,7 +467,6 @@ namespace LevelEditorICA
                     {
                         return true;
                     }
-
                     throw new FileFormatException("Unable to load from XML, likely a corrupt file.");
                 }
 
@@ -488,14 +476,12 @@ namespace LevelEditorICA
                     MessageBox.Show(this, message, "Error", MessageBoxButton.OK);
                 }
             }
-
             return false;
         }
 
         private void BtnLoadXML_click(object sender, RoutedEventArgs e)
         {
             LoadLevel();
-            
         }
 
         /// <summary>
@@ -517,7 +503,6 @@ namespace LevelEditorICA
             SaveFileDialog saveFile = new SaveFileDialog();
             saveFile.Filter = "XML Files|*.xml";
             
-           
             //Process with saving if necessary.
             if(saveFile.ShowDialog() == true)
             {
@@ -526,8 +511,7 @@ namespace LevelEditorICA
                     //Attempt to save the XML.
                     XDocument xml = GenerateXML();
                     xml.Save(saveFile.FileName);
-                    return true;
-                    
+                    return true; 
                 }
                 
                 catch(Exception error)
@@ -548,23 +532,17 @@ namespace LevelEditorICA
                 XElement root = xml.Root;
                 UpdateDimensions(Convert.ToInt16(root.Attribute("Width").Value), Convert.ToInt16(root.Attribute("Height").Value));
 
-
-
                 // Attempt to construct the grid.
                 ClearData();
                 FillFromXElement(root);
 
-                
-                
                 return true;
             }
 
             catch (Exception)
             {
                 // Take care of illegal data by simply clearing it.
-                //ResetToSafeValues();
                 ClearData();
-                //UpdateGridVisuals();
             }
 
             return false;
@@ -572,57 +550,55 @@ namespace LevelEditorICA
 
         private void FillFromXElement(XElement root)
         {
-               
             IEnumerable<XElement> elementRoot = root.Elements("GameTiles");
 
-            BitmapImage bitmap = new BitmapImage(new Uri(root.Attribute("Sprite").Value, UriKind.Relative));
-            sFilenames = root.Attribute("Sprite").Value;
-            SpriteSheetList.Height = bitmap.PixelHeight;
-            SpriteSheetList.Width = bitmap.PixelWidth;
-            for (int i = 0; i < bitmap.PixelHeight / tileSize; i++)
-                for (int j = 0; j < bitmap.PixelWidth / tileSize; j++)
-                {
-
-
-                    panelImages.Add(new Image()
+            if (root.Attribute("Sprite").Value != "")
+            {
+                BitmapImage bitmap = new BitmapImage(new Uri(root.Attribute("Sprite").Value, UriKind.Relative));
+                sFilenames = root.Attribute("Sprite").Value;
+                SpriteSheetList.Height = bitmap.PixelHeight;
+                SpriteSheetList.Width = bitmap.PixelWidth;
+                for (int i = 0; i < bitmap.PixelHeight / tileSize; i++)
+                    for (int j = 0; j < bitmap.PixelWidth / tileSize; j++)
                     {
-
-                        Source = new CroppedBitmap(bitmap,
-                                             new Int32Rect(j * tileSize, i * tileSize, tileSize, tileSize)),
-                        Height = tileSize
-                    });
-
-                    
-                }
-
-            SpriteSheetList.ItemsSource = new ObservableCollection<Image>(panelImages);
+                        panelImages.Add(new Image()
+                        {
+                            Source = new CroppedBitmap(bitmap,
+                                                 new Int32Rect(j * tileSize, i * tileSize, tileSize, tileSize)),
+                            Height = tileSize
+                        });
+                    }
+                SpriteSheetList.ItemsSource = new ObservableCollection<Image>(panelImages);
+            }
 
             foreach (XElement element in elementRoot)
             {
                 Image img = new Image();
-                img.Source = panelImages[Convert.ToInt16(element.Attribute("ImageIndex").Value)].Source;
-                img.Width = tileSize;
-                img.Height = tileSize;
-                
-                
                 Rectangle rect_ = new Rectangle();
-                rect_.Width = tileSize;
-                rect_.Height = tileSize;
-                rect_.Fill = new SolidColorBrush(Color.FromRgb(255, 0, 0));
-                rect_.Opacity = 0.5;
 
                 if (element.Attribute("Layer").Value == "1")
+                {
                     img.Uid = "Layer 1";
-
+                    Canvas.SetZIndex(img, 1);
+                }
                 else if (element.Attribute("Layer").Value == "2")
+                {
                     img.Uid = "Layer 2";
-
+                    Canvas.SetZIndex(img, 2);
+                }
                 else if (element.Attribute("Layer").Value == "3")
+                {
                     img.Uid = "Layer 3";
-
+                    Canvas.SetZIndex(img, 3);
+                }
                 else if (element.Attribute("IsCollidable").Value == "true")
                 {
+                    rect_.Width = tileSize;
+                    rect_.Height = tileSize;
+                    rect_.Fill = new SolidColorBrush(Color.FromRgb(255, 0, 0));
+                    rect_.Opacity = 0.5;
                     rect_.Uid = "Collision";
+                    Canvas.SetZIndex(rect_, 4);
                     Canvas.SetLeft(rect_, Convert.ToInt16(element.Attribute("PositionX").Value));
                     Canvas.SetTop(rect_, Convert.ToInt16(element.Attribute("PositionY").Value));
                     this.mapTileCanvas.Children.Add(rect_);
@@ -631,10 +607,13 @@ namespace LevelEditorICA
                     this.ImageIndex.Add(Convert.ToInt16(element.Attribute("ImageIndex").Value));
                     this.LayerIndex.Add(Convert.ToInt16(element.Attribute("Layer").Value));
                     this.CollisionIndex.Add(Convert.ToBoolean(element.Attribute("IsCollidable").Value));
-                    
                 }
+
                 if (element.Attribute("IsCollidable").Value == "false")
                 {
+                    img.Source = panelImages[Convert.ToInt16(element.Attribute("ImageIndex").Value)].Source;
+                    img.Width = tileSize;
+                    img.Height = tileSize;
                     Canvas.SetLeft(img, Convert.ToInt16(element.Attribute("PositionX").Value));
                     Canvas.SetTop(img, Convert.ToInt16(element.Attribute("PositionY").Value));
                     this.mapTileCanvas.Children.Add(img);
@@ -646,9 +625,6 @@ namespace LevelEditorICA
                     this.CollisionIndex.Add(Convert.ToBoolean(element.Attribute("IsCollidable").Value));
                 }
             }
-               
-                
-            
         }
 
         private void UpdateDimensions(int newWidth, int newHeight)
@@ -664,12 +640,9 @@ namespace LevelEditorICA
 
         }
 
-
-
         private void ClearData()
         {
             mapTileCanvas.Children.Clear();
-
             CanvasList.Clear();
             mapPositionX.Clear();
             mapPositionY.Clear();

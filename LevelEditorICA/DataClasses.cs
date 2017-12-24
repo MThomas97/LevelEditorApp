@@ -91,21 +91,4 @@ namespace LevelEditorICA
             this.Floor = cell.Floor;
         }
     }
-
-    public class TextureCell
-    {
-        private string title;
-        public string Title
-        {
-            get { return this.title; }
-            set { this.title = value; }
-        }
-
-        private BitmapImage imageData;
-        public BitmapImage ImageData
-        {
-            get { return this.imageData; }
-            set { this.imageData = value; }
-        }
-    }
 }

@@ -153,7 +153,9 @@
   <ItemGroup>
     <Resource Include="ImageIcon.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="exit.png" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DLL_DBWorker\DLL_DBWorker.csproj">
       <Project>{db51d913-e8fc-4479-830f-fc38106e6c19}</Project>

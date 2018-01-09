@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Canvas Width="5" Height="5" Sprite="C:\Users\Michael\Documents\GitHub\LevelEditorApp\Data\Tiles-Sheet.png">
+  <GameTiles Sprite="C:\Users\Michael\Documents\GitHub\LevelEditorApp\Data\Tiles-Sheet.png" PositionX="96" PositionY="0" ImageIndex="7" IsCollidable="false" Layer="1" />
+  <GameTiles Sprite="C:\Users\Michael\Documents\GitHub\LevelEditorApp\Data\Tiles-Sheet.png" PositionX="64" PositionY="0" ImageIndex="7" IsCollidable="false" Layer="1" />
+  <GameTiles Sprite="C:\Users\Michael\Documents\GitHub\LevelEditorApp\Data\Tiles-Sheet.png" PositionX="64" PositionY="32" ImageIndex="7" IsCollidable="false" Layer="1" />
+  <GameTiles Sprite="C:\Users\Michael\Documents\GitHub\LevelEditorApp\Data\Tiles-Sheet.png" PositionX="32" PositionY="32" ImageIndex="7" IsCollidable="false" Layer="1" />
+  <GameTiles Sprite="C:\Users\Michael\Documents\GitHub\LevelEditorApp\Data\Tiles-Sheet.png" PositionX="32" PositionY="64" ImageIndex="7" IsCollidable="false" Layer="1" />
+  <GameTiles Sprite="C:\Users\Michael\Documents\GitHub\LevelEditorApp\Data\Tiles-Sheet.png" PositionX="32" PositionY="96" ImageIndex="7" IsCollidable="false" Layer="1" />
+  <GameTiles Sprite="C:\Users\Michael\Documents\GitHub\LevelEditorApp\Data\Tiles-Sheet.png" PositionX="64" PositionY="96" ImageIndex="7" IsCollidable="false" Layer="1" />
+  <GameTiles Sprite="C:\Users\Michael\Documents\GitHub\LevelEditorApp\Data\Tiles-Sheet.png" PositionX="96" PositionY="96" ImageIndex="7" IsCollidable="false" Layer="1" />
+  <GameTiles Sprite="C:\Users\Michael\Documents\GitHub\LevelEditorApp\Data\Tiles-Sheet.png" PositionX="96" PositionY="64" ImageIndex="7" IsCollidable="false" Layer="1" />
+  <GameTiles Sprite="C:\Users\Michael\Documents\GitHub\LevelEditorApp\Data\Tiles-Sheet.png" PositionX="128" PositionY="64" ImageIndex="7" IsCollidable="false" Layer="1" />
+  <GameTiles Sprite="C:\Users\Michael\Documents\GitHub\LevelEditorApp\Data\Tiles-Sheet.png" PositionX="128" PositionY="32" ImageIndex="7" IsCollidable="false" Layer="1" />
+  <GameTiles Sprite="C:\Users\Michael\Documents\GitHub\LevelEditorApp\Data\Tiles-Sheet.png" PositionX="96" PositionY="32" ImageIndex="7" IsCollidable="false" Layer="1" />
+  <GameTiles Sprite="C:\Users\Michael\Documents\GitHub\LevelEditorApp\Data\Tiles-Sheet.png" PositionX="64" PositionY="64" ImageIndex="7" IsCollidable="false" Layer="1" />
+  <GameTiles Sprite="C:\Users\Michael\Documents\GitHub\LevelEditorApp\Data\Tiles-Sheet.png" PositionX="64" PositionY="128" ImageIndex="7" IsCollidable="false" Layer="1" />
+  <GameTiles Sprite="C:\Users\Michael\Documents\GitHub\LevelEditorApp\Data\Tiles-Sheet.png" PositionX="32" PositionY="128" ImageIndex="7" IsCollidable="false" Layer="1" />
+  <GameTiles Sprite="C:\Users\Michael\Documents\GitHub\LevelEditorApp\Data\Tiles-Sheet.png" PositionX="0" PositionY="128" ImageIndex="7" IsCollidable="false" Layer="1" />
+  <GameTiles Sprite="C:\Users\Michael\Documents\GitHub\LevelEditorApp\Data\Tiles-Sheet.png" PositionX="96" PositionY="128" ImageIndex="7" IsCollidable="false" Layer="1" />
+  <GameTiles Sprite="C:\Users\Michael\Documents\GitHub\LevelEditorApp\Data\Tiles-Sheet.png" PositionX="128" PositionY="96" ImageIndex="7" IsCollidable="false" Layer="1" />
+  <GameTiles Sprite="C:\Users\Michael\Documents\GitHub\LevelEditorApp\Data\Tiles-Sheet.png" PositionX="128" PositionY="0" ImageIndex="7" IsCollidable="false" Layer="1" />
+  <GameTiles Sprite="C:\Users\Michael\Documents\GitHub\LevelEditorApp\Data\Tiles-Sheet.png" PositionX="128" PositionY="128" ImageIndex="7" IsCollidable="false" Layer="1" />
+  <GameTiles Sprite="C:\Users\Michael\Documents\GitHub\LevelEditorApp\Data\Tiles-Sheet.png" PositionX="0" PositionY="32" ImageIndex="7" IsCollidable="false" Layer="1" />
+  <GameTiles Sprite="C:\Users\Michael\Documents\GitHub\LevelEditorApp\Data\Tiles-Sheet.png" PositionX="0" PositionY="64" ImageIndex="7" IsCollidable="false" Layer="1" />
+  <GameTiles Sprite="C:\Users\Michael\Documents\GitHub\LevelEditorApp\Data\Tiles-Sheet.png" PositionX="0" PositionY="96" ImageIndex="7" IsCollidable="false" Layer="1" />
+  <GameTiles Sprite="C:\Users\Michael\Documents\GitHub\LevelEditorApp\Data\Tiles-Sheet.png" PositionX="0" PositionY="0" ImageIndex="7" IsCollidable="false" Layer="1" />
+  <GameTiles Sprite="C:\Users\Michael\Documents\GitHub\LevelEditorApp\Data\Tiles-Sheet.png" PositionX="32" PositionY="0" ImageIndex="7" IsCollidable="false" Layer="1" />
+</Canvas>

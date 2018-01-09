@@ -1,7 +1,6 @@
 ﻿using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
-using DLL_DBWorker.Entities;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -27,21 +26,13 @@ namespace LevelEditorICA
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     /// 
-
-    
     public partial class MainWindow : INotifyPropertyChanged
     {
         private MapCell[,] map = new MapCell[1000, 1000];
 
-        
-
-        private BitmapImage activeTexture;
-        private BitmapImage secondTexture;
-
         #region Implementation data
-
+        //Creates all the data
         string sFilenames = "";
-        private bool Collidable = false;
         private List<Image> Collectionlist = new List<Image>();
         private List<Image> CanvasList = new List<Image>();
         private List<int> mapPositionX = new List<int>();
@@ -58,24 +49,10 @@ namespace LevelEditorICA
         private int gridWidth = 5;
         private int tileSize = 32;
 
-        //private LevelGrid m_canvas = null;
-
         #endregion
-
-        public BitmapImage ActiveTexture
-        {
-            get { return activeTexture; }
-            set { activeTexture = value; }
-        }
-        public BitmapImage SecondTexture
-        {
-            get { return secondTexture; }
-            set { secondTexture = value; }
-        }
 
         public MainWindow()
         {
-            
             for (int i = 0; i < 1000; i++)
                 for (int j = 0; j < 1000; j++)
                 {
@@ -102,7 +79,7 @@ namespace LevelEditorICA
         // this is a special type of collection which automatically updates the UI element it is bound to 
         ObservableCollection<Image> panelImages = new ObservableCollection<Image>();
      
-        public int BoundNumber
+        public int BoundNumber //If the boundNumber value doesnt equal tilesize then the tilesize value is changed on runtime
         {
             get { return tileSize; }
             set
@@ -114,7 +91,6 @@ namespace LevelEditorICA
                 }
             }
         }
-
         public bool Layer1Check
         {
             get { return this.layer1check; }
@@ -147,7 +123,6 @@ namespace LevelEditorICA
                 if (gridWidth != value)
                 {
                     gridWidth = value;
-                    mapTileCanvas.Width = gridWidth * tileSize;
 
                     OnPropertyChanged();
                     int i = 0;
@@ -177,7 +152,6 @@ namespace LevelEditorICA
                 if (gridHeight != value)
                 {
                     gridHeight = value;
-                    mapTileCanvas.Height = gridHeight * tileSize;
 
                     OnPropertyChanged();
 
@@ -213,7 +187,6 @@ namespace LevelEditorICA
             get { return gridWidth * tileSize; }
             set
             {
-                
             }
         }
 
@@ -224,12 +197,10 @@ namespace LevelEditorICA
             {
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
             }
-          
         }
        
-        private void DrawTexture(object sender, double x, double y)
+        private void DrawTexture(object sender, double x, double y) // Places the currently selected item in the list view onto the canvas, corrosponding to where the mouse cursor is.
         {
-            
                 for (int i = 0; i < gridHeight; i++)
                     for (int j = 0; j < gridWidth; j++)
                     {
@@ -238,7 +209,6 @@ namespace LevelEditorICA
                         {
                         if (SpriteSheetList.SelectedItem != null)
                         {
-
                             Image img = new Image();
                             Rectangle rect_ = new Rectangle();
                             rect_.Width = tileSize;
@@ -294,17 +264,18 @@ namespace LevelEditorICA
                                         }
                                     }
                                 }
-
-                                Canvas.SetLeft(img, this.map[i, j].X0);
+                                Canvas.SetLeft(img, this.map[i, j].X0); //Sets where the image should be
                                 Canvas.SetTop(img, this.map[i, j].Y0);
-                                this.mapTileCanvas.Children.Add(img);
+                                this.mapTileCanvas.Children.Add(img); //Adds to the canvas
+
+                                //Adds all the data to a list to be used later if saved/loaded
                                 this.CanvasList.Add(img);
                                 this.mapPositionX.Add(this.map[i, j].X0);
                                 this.mapPositionY.Add(this.map[i, j].Y0);
                                 ImageIndex.Add(SpriteSheetList.SelectedIndex);
                             }
                         }
-
+                        //If the collision button is checked it will place a semi transparent red rectangle to indicate it is a collidable object
                             if (CollisionButton.IsChecked == true)
                             {
                                 Rectangle rect_ = new Rectangle();
@@ -344,7 +315,7 @@ namespace LevelEditorICA
                         }
                     }
         }
-        private void DeleteTexture(object sender, double x, double y)
+        private void DeleteTexture(object sender, double x, double y) //Removes textures that are already on the screen when clicked on the canvas where a texture is
         {
             foreach (UIElement element in mapTileCanvas.Children)
             {
@@ -389,7 +360,7 @@ namespace LevelEditorICA
             }  
         }
 
-        private void UpdateCanvas(object sender, RoutedEventArgs e)
+        private void UpdateCanvas(object sender, RoutedEventArgs e) //Controls/Updates the canvas when layers are unchecked and set to invisible
         {
             foreach(UIElement element in mapTileCanvas.Children)
             {
@@ -419,7 +390,7 @@ namespace LevelEditorICA
             }
         }
 
-        private void canvasMap_MouseUp(object sender, MouseButtonEventArgs e)
+        private void canvasMap_MouseUp(object sender, MouseButtonEventArgs e) //When the mouse button is clicked it will get the mouse x, y values & calls draw and delete texture functions
         {
             var clickedPoint = e.GetPosition((Canvas)sender);
             double x = clickedPoint.X;
@@ -429,7 +400,7 @@ namespace LevelEditorICA
             else if (e.ChangedButton == MouseButton.Left && Erase_button.IsChecked == true)
                 this.DeleteTexture(sender, x, y);
         }
-        private void canvasMap_MouseMove(object sender, MouseEventArgs e)
+        private void canvasMap_MouseMove(object sender, MouseEventArgs e) //Allows to draw to canvas and move without individually placing each texture and gets the mouse x, y and calls draw and delte texture functions
         {
             var clickedPoint = e.GetPosition((Canvas)sender);
             double x = clickedPoint.X;
@@ -440,7 +411,7 @@ namespace LevelEditorICA
                 this.DeleteTexture(sender, x, y);
         }
 
-        private void canvasMap_MouseDown(object sender, MouseButtonEventArgs e)
+        private void canvasMap_MouseDown(object sender, MouseButtonEventArgs e) //If the left mouse button is pressed it will delete the current texture hovered over on the canvas & gets the mouse x, y values.
         {
             var clickedPoint = e.GetPosition((Canvas)sender);
             double x = clickedPoint.X;
@@ -449,7 +420,7 @@ namespace LevelEditorICA
                 this.DeleteTexture(sender, x, y);
         }
 
-        private bool LoadLevel()
+        private bool LoadLevel() //Loads the xml into the game editor
         {
             // Create the dialog box.
             OpenFileDialog openBox = new OpenFileDialog();
@@ -483,7 +454,6 @@ namespace LevelEditorICA
         {
             LoadLevel();
         }
-
         /// <summary>
         /// The save event which writes all data to storage.
         /// </summary>
@@ -550,6 +520,7 @@ namespace LevelEditorICA
 
         private void FillFromXElement(XElement root)
         {
+            //Fills in the canvas from the xml by looking at the values in the xml file.
             IEnumerable<XElement> elementRoot = root.Elements("GameTiles");
 
             if (root.Attribute("Sprite").Value != "")
@@ -571,7 +542,7 @@ namespace LevelEditorICA
                 SpriteSheetList.ItemsSource = new ObservableCollection<Image>(panelImages);
             }
 
-            foreach (XElement element in elementRoot)
+            foreach (XElement element in elementRoot) 
             {
                 Image img = new Image();
                 Rectangle rect_ = new Rectangle();
@@ -626,8 +597,7 @@ namespace LevelEditorICA
                 }
             }
         }
-
-        private void UpdateDimensions(int newWidth, int newHeight)
+        private void UpdateDimensions(int newWidth, int newHeight) //Sets the dimensions of the canvas width and height
         {
             gridWidth = newWidth;
             gridHeight = newHeight;
@@ -640,7 +610,7 @@ namespace LevelEditorICA
 
         }
 
-        private void ClearData()
+        private void ClearData() //Clears all the data
         {
             mapTileCanvas.Children.Clear();
             CanvasList.Clear();
@@ -651,22 +621,18 @@ namespace LevelEditorICA
             mapTileCanvas.Children.Clear();
             CollisionIndex.Clear();
             LayerIndex.Clear();
-            //SpriteSheetList.ItemsSource = null; //FIX SO THIS LISTVIEW IS CLEARED TOO
-            //SpriteSheetList.DataContext = null;
-            //SpriteSheetList.Items.Clear();
-            
         }
 
         public XDocument GenerateXML()
         {
-            // Create the document and add the grid parameters.
+            // Create the document and add the canvas parameters.
             XDocument xml = new XDocument();
 
             XElement canvas = new XElement("Canvas",
             new XAttribute("Width", gridWidth), new XAttribute("Height", gridHeight), new XAttribute("Sprite", sFilenames));
 
             int i = 0;
-
+            //Loops through each element in the canvas and creates the values appropriately in the xml file.
             foreach (UIElement element in mapTileCanvas.Children)
             {
                 if (element.Uid != "Delete")
@@ -699,10 +665,9 @@ namespace LevelEditorICA
             return xml;
         }
 
-            private void BtnOpenFile_Click(object sender, RoutedEventArgs e)
+            private void BtnOpenFile_Click(object sender, RoutedEventArgs e) //Loads a png file for a spritesheet to be used on the canvas
         {
             Microsoft.Win32.OpenFileDialog openFileDialog = new Microsoft.Win32.OpenFileDialog();
-            //openFileDialog.InitialDirectory = "c://";
             openFileDialog.FileName = "";
             openFileDialog.DefaultExt = ".png";
             openFileDialog.Filter = "Image documents (.png)|*.png";
@@ -743,7 +708,7 @@ namespace LevelEditorICA
             }
         }
 
-        private void ExitEditorCommand(object sender, RoutedEventArgs e)
+        private void ExitEditorCommand(object sender, RoutedEventArgs e) //Closes the application
         {
             this.Close();
         }
